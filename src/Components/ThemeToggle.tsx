@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react"
-import type { Scroll } from "../types";
+import { useEffect } from "react"
+import type { ThemeProps } from "../types";
 import { IoMdMoon } from "react-icons/io";
 import { IoSunny } from "react-icons/io5";
 
-export const ThemeToggle = ({isScrolled} : Scroll) =>{
-    const [isDarkMode, setIsDarkMode] = useState(true);
+export const ThemeToggle = ({isScrolled, isDarkMode, setIsDarkMode} : ThemeProps) =>{
+    
     
     useEffect(()=>{
         const storedTheme = localStorage.getItem('theme') || 'dark';
-        if(storedTheme === ' dark'){
+        if(storedTheme === 'dark'){
             document.documentElement.classList.add('dark');
             setIsDarkMode(true);
         }else{
             document.documentElement.classList.remove('dark');
             setIsDarkMode(false);
         }
-        console.log(storedTheme);
-    },[]);
+        console.log();
+    },[isDarkMode]);
 
     const ToggleTheme = () =>{
         if(isDarkMode){
