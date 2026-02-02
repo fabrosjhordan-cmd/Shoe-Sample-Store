@@ -103,7 +103,19 @@
   }
 }
 
-@utility text-glow{
+@utility text-glow {
   @apply relative;
   text-shadow: 0 0 10px rgba(167, 139, 250, 0.5)
+}
+
+@utility page-button {
+  @apply bg-primary px-3 py-2 rounded-sm hover:bg-primary/80
+}
+
+@utility active-page{
+  @apply bg-primary/40 px-3 py-2 rounded-sm
+}
+
+@utility page-setter {
+  @apply flex flex-row gap-2 items-center justify-center bg-primary px-3 py-2 rounded-sm hover:bg-primary/80
 }
