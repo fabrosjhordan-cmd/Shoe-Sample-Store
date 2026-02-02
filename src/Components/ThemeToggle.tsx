@@ -15,7 +15,6 @@ export const ThemeToggle = ({isScrolled, isDarkMode, setIsDarkMode} : ThemeProps
             document.documentElement.classList.remove('dark');
             setIsDarkMode(false);
         }
-        console.log();
     },[isDarkMode]);
 
     const ToggleTheme = () =>{
@@ -23,12 +22,10 @@ export const ThemeToggle = ({isScrolled, isDarkMode, setIsDarkMode} : ThemeProps
             document.documentElement.classList.remove('dark');
             localStorage.setItem('theme', 'light');
             setIsDarkMode(false);
-            console.log('light');
         }else{
             document.documentElement.classList.add('dark');
             localStorage.setItem('theme', 'dark');
             setIsDarkMode(true);
-            console.log('dark');
         }
     }
 
