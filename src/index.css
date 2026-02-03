@@ -14,7 +14,7 @@
     --animate-fade-in-delay-1: fade-in 0.7s ease-out 0.2s forwards;
     --animate-fade-in-delay-2: fade-in 0.7s ease-out 0.4s forwards;
     --animate-fade-in-delay-3: fade-in 0.7s ease-out 0.6s forwards;
-
+    --color-loader: hsl(var(--loader));
 
     @keyframes fade-in {
         from{
@@ -38,7 +38,9 @@
     --primary: 250 47% 60%;
     --secondary: 202 32% 47%;
 
-    --border: 214 32% 91%
+    --border: 214 32% 91%;
+
+    --loader: 270 19% 80%;
   }
 
   .dark{
@@ -51,6 +53,8 @@
     --secondary: 213 31% 91%;
 
     --border:  217 33% 20%;
+
+    --loader: 230 39% 39%;
   }
 
   * {
@@ -118,4 +122,8 @@
 
 @utility page-setter {
   @apply flex flex-row gap-2 items-center justify-center bg-primary px-3 py-2 rounded-sm hover:bg-primary/80
+}
+
+@utility login-button {
+  @apply bg-primary px-14 md:px-24 py-2 rounded-lg hover:bg-primary/60
 }

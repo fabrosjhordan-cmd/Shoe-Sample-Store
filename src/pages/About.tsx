@@ -5,7 +5,7 @@ import type { PageProps } from "../types"
 export const About = ({isScrolled, isDarkMode, setIsDarkMode} : PageProps) =>{
     return (
         <>
-            {/* NavBar */}
+            {/* Theme */}
             <ThemeToggle isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
             
             

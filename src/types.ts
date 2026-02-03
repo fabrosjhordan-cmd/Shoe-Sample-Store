@@ -1,3 +1,5 @@
+import type{ Session } from "@supabase/supabase-js";
+
 export type ThemeProps = {
     isScrolled: boolean
     isDarkMode: boolean
@@ -26,4 +28,10 @@ export type ProductProps = {
     image: string
     gender: string
     avg_price: number
+}
+
+export type AuthData = {
+    session: Session | undefined
+    profile: any
+    loading: boolean
 }

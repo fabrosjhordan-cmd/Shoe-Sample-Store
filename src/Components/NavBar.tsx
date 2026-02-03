@@ -30,7 +30,7 @@ export const NavBar = ({isScrolled} : NavProps) =>{
             
             <div className=" flex items-center gap-6" >
                 <button><BiCart size={20} className="hover:text-primary hover:text-glow"/></button>
-                <button className="px-6 py-2 bg-primary/70 hover:bg-primary hover:text-secondary/50 rounded-full max-sm:hidden">Sign In</button>
+                <a href="login" className="px-6 py-2 bg-primary/70 hover:bg-primary/50 hover:text-foreground/70 rounded-full max-sm:hidden">Sign In</a>
             </div>
 
             <button className="md:hidden z-50">
