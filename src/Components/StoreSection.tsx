@@ -7,7 +7,7 @@ import { useCart } from "../provider/CartProvider";
 
 export const StoreSection = () =>{
     const shoes = ProductList;
-    const {addItem, items} = useCart();
+    const {addItem} = useCart();
     const [currentPage, setCurrentPage] = useState<number>(()=>{
         const storedPage : any = sessionStorage.getItem('page')
         return storedPage ? Number(storedPage) : 1;

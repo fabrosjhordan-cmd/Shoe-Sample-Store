@@ -25,7 +25,7 @@ export const Cart = ({items, total, isScrolled, isDarkMode, setIsDarkMode}: Cart
                         </div>
                         <div className="flex flex-col justify-between">
                             <p className="text-xl font-bold">10119.00 Php</p>
-                            <div className="flex flex-row justify-between border border-foreground/30 rounded-full px-1 py-2">
+                            <div className="flex flex-row justify-between border border-foreground/30 rounded-full px-3 py-2">
                                 <button><BsTrash size={25} /></button>
                                 <p>1</p>
                                 <button><BsPlus size={25} /></button>

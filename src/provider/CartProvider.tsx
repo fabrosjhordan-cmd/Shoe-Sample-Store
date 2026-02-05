@@ -14,22 +14,23 @@ const CartProvider = ({children} : PropsWithChildren)=>{
     const total = items.reduce((sum, item) => sum + item.avg_price * item.quantity, 0)
 
     const addItem = (product : ProductProps) =>{
-        const existingItem : CartItem | undefined= items.find((item)=> item.product.id === product.id)
+        const existingItem = items.find((item)=> item.product.id === product.id)
+        
         if(existingItem){
-            updateQuantity(existingItem.product.id.toString(), 1)
-            return
+            updateQuantity(existingItem?.id, 1)
+            return;
         }
         const newCartItem = {
             id: crypto.randomUUID(),
             product,
             quantity: 1,
         }
-        setItems((exisitingItems)=> [newCartItem, ...exisitingItems]);
+        setItems((exisitingItems : any)=> [newCartItem, ...exisitingItems]);
     }
 
     const updateQuantity = (itemId: string, amount: 1 | -1) =>{
         setItems((existingItems)=>
-        existingItems.map((item)=> itemId ? {...item, quantity: item.quantity + amount} : item)
+        existingItems.map((item)=> itemId === item.id ? {...item, quantity: item.quantity + amount} : item)
         .filter((item)=> item.quantity > 0)
     )
     }

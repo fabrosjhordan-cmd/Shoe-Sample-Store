@@ -24,9 +24,9 @@ function App() {
           return ()=> window.removeEventListener('scroll', handleScroll)
       }, []);
 
-      // useEffect(()=>{
-      //   console.log(items);
-      // }, [items])
+      useEffect(()=>{
+        console.log(items);
+      }, [items])
 
   return (
     <>
