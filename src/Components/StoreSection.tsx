@@ -15,6 +15,7 @@ export const StoreSection = () =>{
     const itemsPerPage = 6;
     const numberedPage : any[] = []
 
+
     const lastIndex = currentPage * itemsPerPage
     const firstIndex = lastIndex - itemsPerPage;
     const totalPage = Math.ceil(shoes.length / itemsPerPage);
@@ -27,6 +28,7 @@ export const StoreSection = () =>{
     useEffect(()=>{
        sessionStorage.setItem('page', String(currentPage));
     }, [currentPage]);
+
 
     const pageSetter = (direction : any) =>{
         if(direction === 'previous'){

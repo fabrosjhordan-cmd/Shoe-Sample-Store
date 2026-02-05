@@ -65,11 +65,15 @@ export type CartType = {
     total: number
 }
 
+export type Orders = {
+    id: string
+    product: ProductProps
+    quantity: number
+}
+
 
 export type CartProps ={
     isScrolled: boolean
     isDarkMode: boolean
     setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>
-    items: CartItem[]
-    total: number
 }

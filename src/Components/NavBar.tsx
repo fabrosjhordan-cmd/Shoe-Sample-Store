@@ -13,7 +13,7 @@ export const NavBar = ({isScrolled} : NavProps) =>{
     return(
     <nav className={`fixed w-full z-40 transition-all duration-300 ${isScrolled ? 'py-2 bg-background/80 backdrop-blur-md shadow-md' : 'py-5'}`}>
         <div className="container flex items-center justify-between">
-            <a href="#hero" className="text-xl font-bold flex items-center gap-2">
+            <a href="/#hero" className="text-xl font-bold flex items-center gap-2">
                 <img src='shoe-svgrepo-com.svg' className="w-6 h-6" alt="Logo"/>
                 <span className="relative z-10">
                    <span className="text-primary">Sample </span>Store

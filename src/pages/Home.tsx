@@ -5,7 +5,7 @@ import type { HomeProps } from "../types";
 import { StoreSection } from "../Components/StoreSection";
 
 
-export const Home = ({isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
+export const Home = ({ isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
     // const {  loading, error } = UseProducts();
     
     // if(loading) return <Loader />
