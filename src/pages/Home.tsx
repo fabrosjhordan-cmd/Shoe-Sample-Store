@@ -1,16 +1,15 @@
 import { NavBar } from "../Components/NavBar"
 import { ThemeToggle } from "../Components/ThemeToggle";
 import { HeroSection } from "../Components/HeroSection";
-import type { PageProps } from "../types";
+import type { HomeProps } from "../types";
 import { StoreSection } from "../Components/StoreSection";
-import { UseProducts } from "../api/UseProducts";
-import { Loader } from "../Components/Loader";
 
-export const Home = ({isScrolled, isDarkMode, setIsDarkMode} : PageProps) =>{
-    const {  loading, error } = UseProducts();
+
+export const Home = ({isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
+    // const {  loading, error } = UseProducts();
     
-    if(loading) return <Loader />
-    if(error) return <div>Something went wrong..</div>
+    // if(loading) return <Loader />
+    // if(error) return <div>Something went wrong..</div>
 
     return(
         <>

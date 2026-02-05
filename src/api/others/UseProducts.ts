@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import type { ProductProps } from "../types";
+import type { ProductProps } from "../../types";
 
 export const UseProducts = () =>{
     const [shoes, setShoes] = useState<ProductProps[]>([]);

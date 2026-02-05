@@ -1,17 +1,18 @@
 
 import { BiCart } from "react-icons/bi";
-import { UseProducts } from "../api/UseProducts";
 import { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
+import { ProductList } from "../api/others/dummy";
+import { useCart } from "../provider/CartProvider";
 
 export const StoreSection = () =>{
-    const {shoes}  = UseProducts();
+    const shoes = ProductList;
+    const {addItem, items} = useCart();
     const [currentPage, setCurrentPage] = useState<number>(()=>{
         const storedPage : any = sessionStorage.getItem('page')
         return storedPage ? Number(storedPage) : 1;
     });
-    const itemsPerPage = 5;
+    const itemsPerPage = 6;
     const numberedPage : any[] = []
 
     const lastIndex = currentPage * itemsPerPage
@@ -35,19 +36,26 @@ export const StoreSection = () =>{
         }
     }
 
+    const handleCart = (item : any) =>{
+        if(!item){
+            return
+        }
+        addItem(shoes[item-1]);
+    }
+
     return(
         <section id='store' className="relative px-4 py-16 bg-secondary/2 rounded-xl mb-12">
                 <h1 className="text-primary text-5xl font-bold mb-12 text-center">Products</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                     {productsPage.map((product)=>(
                         <div key={product.id} className="relative flex flex-col gap-2 group bg-card rounded-lg overflow-hidden shadow-xs card-hover px-2 py-1">
-                            <div className="h-30 overflow-hidden mb-4">
+                            <div className="h-80 overflow-hidden mb-4">
                                 <img src={product.image} className="w-full h-full rounded-md" />
                             </div>
                             <div className="font-medium text-lg">{product.title}</div>
                             <div className="text-sm text-foreground/60 capitalize">{product.gender}</div>
                             <div className="text-sm text-primary/90 mt-auto">$ {product.avg_price.toFixed(2)}</div>
-                            <button className="flex flex-row items-center justify-center gap-4 w-full py-1.5 bg-primary/30 rounded-md mt-auto mb-2 hover:scale-103 hover:bg-primary/60 duration-200"><BiCart size={20} />Add to Cart</button>
+                            <button onClick={()=>handleCart(product.id)} className="flex flex-row items-center justify-center gap-4 w-full py-1.5 bg-primary/30 rounded-md mt-auto mb-2 hover:scale-103 hover:bg-primary/60 duration-200"><BiCart size={20} />Add to Cart</button>
                         </div>
                     ))
                     }
