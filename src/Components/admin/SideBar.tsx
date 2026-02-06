@@ -6,13 +6,13 @@ const SideBarLinks = [
     {href: '/dashboard#home', label: 'Home', icon: <BiHome size={20} />},
     {href: '/dashboard#products', label: 'Products', icon: <FaListUl size={20} /> },
     {href: '/dashboard#orders', label: 'Orders', icon: <FaShoppingCart size={20} /> },
-    {href: '/dashboard#employees', label: 'Employee', icon: <FaUserTie size={20} /> },
+    // {href: '/dashboard#employees', label: 'Employee', icon: <FaUserTie size={20} /> },
     {href: '/dashboard#settings', label: 'Settings', icon: <FaGears size={20} /> },
 ]
  
 export const SideBar =()=>{
     return (
-        <nav className="min-h-screen fixed z-40 transition-all duration-300 py-10 bg-primary/15 w-[35vh]">
+        <nav className="min-h-screen max-sm:hidden fixed z-40 transition-all duration-300 py-10 bg-primary/15 w-[35vh]">
             <div className="flex flex-col items-center justify-center">
                 <a href="/dashboard" className="text-xl font-bold flex items-center gap-2">
                     <img src='shoe-svgrepo-com.svg' className="w-6 h-6" alt="Logo"/>

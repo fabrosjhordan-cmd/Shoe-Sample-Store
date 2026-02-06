@@ -90,3 +90,13 @@ export type SideBarLink = {
   icon: React.ReactNode;
   href: Section;
 };
+
+export type ProductListProps = {
+    setId: React.Dispatch<React.SetStateAction<number>>
+    setIsEditing: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type NewProductProps = {
+    id: number
+    isEditing: boolean
+}

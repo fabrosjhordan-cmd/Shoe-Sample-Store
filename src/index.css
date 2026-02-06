@@ -134,5 +134,5 @@
 }
 
 @utility dashboard-screen {
-    @apply w-full flex flex-col pl-75 pr-4;
+    @apply w-full flex flex-col md:pl-75 pl-4 pr-4;
 }

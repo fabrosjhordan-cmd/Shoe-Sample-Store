@@ -1,7 +1,13 @@
+import { FaSortNumericUpAlt } from "react-icons/fa"
+
 export const Orders = () =>{
     return (
-        <div id='orders' className="min-h-screen overflow-hidden py-10">
+        <div id='orders' className="flex flex-col gap-4 min-h-screen overflow-hidden py-10">
             <h1 className="text-4xl">Orders</h1>
+            <div className="flex flex-row justify-between items-center">
+                <button className="flex flex-row items-center gap-3 py-1 px-4 bg-primary/30 rounded-lg text-lg"><FaSortNumericUpAlt />Sort</button>
+                {/* create a table here */}
+            </div>
         </div>
     )
 }
