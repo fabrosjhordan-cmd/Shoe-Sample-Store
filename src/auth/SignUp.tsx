@@ -3,7 +3,7 @@ import { ThemeToggle } from "../Components/ThemeToggle"
 import type { ThemeProps } from "../types"
 import { BiChevronLeft } from "react-icons/bi";
 import { supabase } from "../supabaseClient";
-import { Loader } from "../Components/Loader";
+import { Loader } from "../Components/user/Loader";
 
 export const SignUp = ({isDarkMode, isScrolled, setIsDarkMode}: ThemeProps) =>{
     const [loading, setLoading] = useState(false);

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Loader } from "../Components/Loader";
+import { Loader } from "../Components/user/Loader";
 import { supabase } from "../supabaseClient";
 import { ThemeToggle } from "../Components/ThemeToggle";
 import type { ThemeProps } from "../types";

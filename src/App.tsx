@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import { SignIn } from './auth/SignIn';
 import { SignUp } from './auth/SignUp';
 import { useAuth } from './provider/AuthProvider';
-import { Cart } from './Components/Cart';
+import { Cart } from './Components/user/Cart';
+import { DashBoard } from './pages/Dashboard';
 
 function App() {
   const {session} = useAuth();
@@ -31,6 +32,7 @@ function App() {
           <Route path='login' element={<SignIn isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
           <Route path='signup' element={<SignUp isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
           <Route path='cart' element={<Cart isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
+          <Route path='dashboard' element={<DashBoard session={session} isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />}/>
           <Route path='*' element={<NotFound />} />
           
         </Routes>

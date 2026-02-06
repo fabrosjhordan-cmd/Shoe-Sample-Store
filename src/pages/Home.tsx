@@ -1,8 +1,8 @@
-import { NavBar } from "../Components/NavBar"
+import { NavBar } from "../Components/user/NavBar"
 import { ThemeToggle } from "../Components/ThemeToggle";
-import { HeroSection } from "../Components/HeroSection";
+import { HeroSection } from "../Components/user/HeroSection";
 import type { HomeProps } from "../types";
-import { StoreSection } from "../Components/StoreSection";
+import { StoreSection } from "../Components/user/StoreSection";
 
 
 export const Home = ({ isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{

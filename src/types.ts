@@ -7,6 +7,7 @@ export type HomeProps = {
     session: Session | undefined
 }
 
+
 export type ThemeProps = {
     isScrolled: boolean
     isDarkMode: boolean
@@ -77,3 +78,15 @@ export type CartProps ={
     isDarkMode: boolean
     setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>
 }
+
+export type SideBarProp = {
+    setActiveSection: React.Dispatch<React.SetStateAction<"home" | "products" | "orders">>
+}
+
+export type Section = "home" | "products" | "orders";
+
+export type SideBarLink = {
+  label: string;
+  icon: React.ReactNode;
+  href: Section;
+};

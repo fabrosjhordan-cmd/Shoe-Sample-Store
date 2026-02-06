@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { BiCart, BiMenu, BiX } from "react-icons/bi";
-import type { NavProps } from "../types";
+import type { NavProps } from "../../types";
 
 const NavLinks = [
     {href: '/#hero', label: 'Home'},

@@ -1,4 +1,4 @@
-import { NavBar } from "../Components/NavBar"
+import { NavBar } from "../Components/user/NavBar"
 import { ThemeToggle } from "../Components/ThemeToggle"
 import type { PageProps } from "../types"
 

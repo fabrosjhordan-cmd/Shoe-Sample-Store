@@ -2,8 +2,9 @@
 import { BiCart } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { ProductList } from "../api/others/dummy";
-import { useCart } from "../provider/CartProvider";
+import { ProductList } from "../../api/others/dummy";
+import { useCart } from "../../provider/CartProvider";
+import { ToastContainer, toast } from 'react-toastify';
 
 export const StoreSection = () =>{
     const shoes = ProductList;
@@ -43,12 +44,19 @@ export const StoreSection = () =>{
             return
         }
         addItem(shoes[item-1]);
+        toast.success('Item Added to your Cart',{
+            position: "bottom-right",
+            theme: "dark",
+            closeOnClick: true,
+            autoClose: 2000,
+            pauseOnHover: true,
+        })
     }
 
     return(
-        <section id='store' className="relative px-4 py-16 bg-secondary/2 rounded-xl mb-12">
+        <section id='store' className="relative rounded-xl mb-12">
                 <h1 className="text-primary text-5xl font-bold mb-12 text-center">Products</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 py-6 bg-secondary/2 mb-12">
                     {productsPage.map((product)=>(
                         <div key={product.id} className="relative flex flex-col gap-2 group bg-card rounded-lg overflow-hidden shadow-xs card-hover px-2 py-1">
                             <div className="h-80 overflow-hidden mb-4">
@@ -75,6 +83,7 @@ export const StoreSection = () =>{
                         Next <FaChevronRight size={15} />
                     </button>
                 </div>
+                <ToastContainer />
         </section>
     )
 }

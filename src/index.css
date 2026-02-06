@@ -73,6 +73,7 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: 'Inter', sans-serif;
+
   }
 
 .font-serif{
@@ -126,4 +127,12 @@
 
 @utility login-button {
   @apply bg-primary px-14 md:px-24 py-2 rounded-lg hover:bg-primary/60
+}
+
+@utility sidebar-button {
+  @apply flex items-center gap-4 bg-transparent py-3 px-8 w-full text-foreground/70 hover:text-foreground hover:bg-primary/80 transition-colors duration-200
+}
+
+@utility dashboard-screen {
+    @apply w-full flex flex-col pl-75 pr-4;
 }

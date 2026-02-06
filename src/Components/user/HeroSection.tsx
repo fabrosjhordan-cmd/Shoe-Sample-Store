@@ -1,4 +1,4 @@
-import type { HeroProps } from "../types"
+import type { HeroProps } from "../../types"
 
 export const HeroSection = ({isDarkMode} : HeroProps) =>{
     return (
