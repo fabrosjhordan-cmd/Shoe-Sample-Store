@@ -8,11 +8,16 @@ import { Statistics } from "../Components/admin/Statistics"
 import { ThemeToggle } from "../Components/ThemeToggle"
 import type { HomeProps } from "../types"
 import { NewProducts } from "../Components/admin/NewProducts"
+import { useNavigate } from "react-router-dom"
 
 export const DashBoard = ({session, isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
     const [id, setId] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
+    const nav = useNavigate();
 
+    // if(!session){
+    //     nav('/');
+    // }
     return (
         <>
         <ThemeToggle isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />

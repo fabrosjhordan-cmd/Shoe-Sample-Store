@@ -136,3 +136,8 @@
 @utility dashboard-screen {
     @apply w-full flex flex-col md:pl-75 pl-4 pr-4;
 }
+
+/* Create a dropdown */
+@utility dropdown {
+  @apply relative
+}

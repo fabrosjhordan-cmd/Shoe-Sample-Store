@@ -53,7 +53,7 @@ export const Products = ({setId, setIsEditing} : ProductListProps) =>{
                         <div className="text-sm text-foreground/60 capitalize">{product.gender}</div>
                         {/* Price */}
                         <div className="flex flex-row items-center justify-between mt-auto">
-                            <h1 className="text-sm text-primary/90">${product.avg_price.toFixed(2)}</h1>
+                            <h1 className="text-sm text-primary/90">₱ {product.avg_price.toFixed(2)}</h1>
                             <a href='dashboard#new' onClick={()=>{setId(product.id), setIsEditing(true)}} className="hover:text-primary"><CiEdit size={23}/></a>
                         </div>
                     </div>
