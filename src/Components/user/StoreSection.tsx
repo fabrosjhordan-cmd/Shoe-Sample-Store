@@ -2,20 +2,23 @@
 import { BiCart } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { ProductList } from "../../api/others/dummy";
 import { useCart } from "../../provider/CartProvider";
 import { ToastContainer, toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { fetchData } from "../../newProductSlice";
 
 export const StoreSection = () =>{
-    const shoes = ProductList;
+    const shoes = useAppSelector((state)=> state.product.items);
+    const isLoading = useAppSelector((state) => state.product.loading);
+    const dispatch = useAppDispatch()
     const {addItem} = useCart();
     const [currentPage, setCurrentPage] = useState<number>(()=>{
         const storedPage : any = sessionStorage.getItem('page')
         return storedPage ? Number(storedPage) : 1;
     });
+
     const itemsPerPage = 6;
     const numberedPage : any[] = []
-
 
     const lastIndex = currentPage * itemsPerPage
     const firstIndex = lastIndex - itemsPerPage;
@@ -25,6 +28,10 @@ export const StoreSection = () =>{
     for(let i : number = 0; i  < totalPage; i++){
         numberedPage.push(i);
     }
+
+    useEffect(()=>{
+        dispatch(fetchData());
+    }, [])
 
     useEffect(()=>{
        sessionStorage.setItem('page', String(currentPage));
@@ -43,7 +50,8 @@ export const StoreSection = () =>{
         if(!item){
             return
         }
-        addItem(shoes[item-1]);
+        const addList : any = shoes.find((prod)=> prod.id === item)
+        addItem(addList);
         toast.success('Item Added to your Cart',{
             position: "bottom-right",
             theme: "dark",
@@ -60,11 +68,11 @@ export const StoreSection = () =>{
                     {productsPage.map((product)=>(
                         <div key={product.id} className="relative flex flex-col gap-2 group bg-card rounded-lg overflow-hidden shadow-xs card-hover px-2 py-1">
                             <div className="h-80 overflow-hidden mb-4">
-                                <img src={product.image} className="w-full h-full rounded-md" />
+                                <img src={product.image ? product.image : ''} className="w-full h-full rounded-md" />
                             </div>
-                            <div className="font-medium text-lg">{product.title}</div>
+                            <div className="font-medium text-lg">{product.name}</div>
                             <div className="text-sm text-foreground/60 capitalize">{product.gender}</div>
-                            <div className="text-sm text-primary/90 mt-auto">$ {product.avg_price.toFixed(2)}</div>
+                            <div className="text-sm text-primary/90 mt-auto">$ {product.price.toFixed(2)}</div>
                             <button onClick={()=>handleCart(product.id)} className="flex flex-row items-center justify-center gap-4 w-full py-1.5 bg-primary/30 rounded-md mt-auto mb-2 hover:scale-103 hover:bg-primary/60 duration-200"><BiCart size={20} />Add to Cart</button>
                         </div>
                     ))

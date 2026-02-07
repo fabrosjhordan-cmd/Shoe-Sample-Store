@@ -10,7 +10,7 @@ export const Products = ({setId, setIsEditing} : ProductListProps) =>{
             const storedPage : any = sessionStorage.getItem('pageAdmin')
             return storedPage ? Number(storedPage) : 1;
         });
-        const itemsPerPage = 14;
+        const itemsPerPage = 10;
         const numberedPage : any[] = []
     
     
@@ -43,14 +43,22 @@ export const Products = ({setId, setIsEditing} : ProductListProps) =>{
                 <input type="text" className="border rounded-lg px-2 py-1 focus:outline-hidden" placeholder="Search.." />
             </div>
             {/* lists */}
-            <div className="container min-h-[65vh] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 py-2 bg-foreground/10 rounded-lg">
+            <div className="container min-h-[65vh] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 py-2 bg-foreground/10 rounded-lg">
                 {productsPage.map((product)=>(
-                    <div key={product.id} className="flex flex-col gap-2 group bg-card rounded-lg overflow-hidden shadow-xs card-hover px-2 py-1">
-                        <div className="h-40 overflow-hidden mb-4">
+                    <div key={product.id} className="flex flex-col gap-2 bg-card group overflow-hidden rounded-lg shadow-xs card-hover px-2 py-1">
+                        <div className="h-30 overflow-hidden mb-4">
                             <img src={product.image} className="w-full h-full rounded-md" />
                         </div>
-                        <div className="font-medium text-lg">{product.title}</div>
-                        <div className="text-sm text-foreground/60 capitalize">{product.gender}</div>
+                        {/* Title */}
+                        <div className="relative">
+                            <div className="peer h-8 font-medium text-lg overflow-hidden">{product.title}</div>
+                            <div className="absolute left-0 bottom-full z-50 mt-1 hidden max-w-xs rounded bg-black px-2 py-1 text-sm text-white peer-hover:block">{product.title}</div>
+                        </div>
+                        {/* Gnder */}
+                        <div className="relative">
+                            <div className="peer h-8 text-sm text-foreground/60 capitalize overflow-hidden">{product.gender}</div>
+                            <div className="absolute left-0 bottom-full z-50 mt-1 hidden max-w-xs rounded bg-black px-2 py-1 text-sm text-white peer-hover:block">{product.gender}</div>
+                        </div>
                         {/* Price */}
                         <div className="flex flex-row items-center justify-between mt-auto">
                             <h1 className="text-sm text-primary/90">₱ {product.avg_price.toFixed(2)}</h1>

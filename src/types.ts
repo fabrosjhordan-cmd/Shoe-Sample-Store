@@ -1,4 +1,10 @@
 import type{ Session } from "@supabase/supabase-js";
+import type { Database } from "./database.types";
+
+export type Tables<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Row'];
+export type Enums<T extends keyof Database['public']['Enums']> =
+  Database['public']['Enums'][T];
 
 export type HomeProps = {
     isScrolled: boolean
@@ -99,4 +105,10 @@ export type ProductListProps = {
 export type NewProductProps = {
     id: number
     isEditing: boolean
+}
+
+export type initialStateProps ={
+    items: Tables<'products'>[]
+    loading: boolean
+    error: string | null
 }
