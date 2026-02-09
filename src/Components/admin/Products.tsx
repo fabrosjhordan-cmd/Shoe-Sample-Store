@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight, FaPlus } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
-import type { ProductListProps } from "../../types";
+import { defaultShoeImage, type ProductListProps } from "../../types";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchData } from "../../newProductSlice";
 
@@ -50,7 +50,7 @@ export const Products = ({setId, setIsEditing, setScreen} : ProductListProps) =>
                 {productsPage.map((product)=>(
                     <div key={product.id} className="flex flex-col gap-2 bg-card group overflow-hidden rounded-lg shadow-xs card-hover px-2 py-1">
                         <div className="h-30 overflow-hidden mb-4">
-                            <img src={product.image ? product.image : ''} className="w-full h-full rounded-md" />
+                            <img src={product.image ? product.image : defaultShoeImage} className="w-full h-full rounded-md" />
                         </div>
                         {/* Title */}
                         <div className="relative">

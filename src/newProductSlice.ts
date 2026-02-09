@@ -8,7 +8,7 @@ export const fetchData = createAsyncThunk(
     'product/fetchData',
     async(_, thunkAPI)=>{
         try{
-            const {data, error} = await supabase.from('products').select('*').order('created_at', {ascending: false})
+            const {data, error} = await supabase.from('products').select('*').gt('stock', 0).order('created_at', {ascending: false})
             if(error) throw error
             return data
         }catch(error){
@@ -16,7 +16,6 @@ export const fetchData = createAsyncThunk(
         }
     }
 )
-
 
 // Make this for orders by user....
 export const fetchByUser = createAsyncThunk(
@@ -34,14 +33,26 @@ export const fetchByUser = createAsyncThunk(
 
 export const addOrder = createAsyncThunk(
     'product/addOrder',
-    async(items, thunkAPI) =>{
+    async({cart_id, email, quantity, totalPrice, role} : {cart_id: string, email: string, quantity: number, totalPrice: number, role: string | undefined}, thunkAPI) =>{
         try{
-            const {data, error} = await supabase.from('orders').insert(items).select()
+            const {data, error} = await supabase.from('sales').insert({cart_id, email, quantity, total: totalPrice, role}).select()
             if(error) throw error
-            console.log(data)
             return data
         }catch(error){
             return thunkAPI.rejectWithValue(error);
+        }
+    }
+)
+
+export const addOrderList = createAsyncThunk(
+    'product/addOrderList',
+    async({total, quantity, name, cart_id, order_id, product_id} : {total: number, quantity: number, name: string, cart_id: string, order_id: string, product_id: number}, thunkAPI)=>{
+        try{
+            const {data, error} = await supabase.from('orders').insert({total, quantity, name, cart_id, order_id, product_id}).select();
+            if(error) throw error
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error)
         }
     }
 )
@@ -93,6 +104,14 @@ const newProductSlice = createSlice({
             state.items =action.payload
         })
         .addCase(updateProduct.fulfilled, (state, action)=>{
+            state.loading = false
+            state.items = action.payload
+        })
+        .addCase(addOrder.fulfilled, (state, action)=>{
+            state.loading = false
+            state.items = action.payload
+        })
+        .addCase(addOrderList.fulfilled, (state, action)=>{
             state.loading = false
             state.items = action.payload
         })

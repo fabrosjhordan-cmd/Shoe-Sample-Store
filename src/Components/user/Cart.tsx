@@ -5,11 +5,15 @@ import { ThemeToggle } from "../ThemeToggle";
 import { useEffect, useState } from "react";
 import { BiMinus } from "react-icons/bi";
 import { useCart } from "../../provider/CartProvider";
+import { addOrder, addOrderList } from "../../newProductSlice";
+import { useAppDispatch } from "../../hooks";
 
-export const Cart = ({isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
+export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
     const [orders, setOrders] = useState<Orders[]>([]); 
     const [totalPrice, setTotalPrice] = useState(0);
-
+    const [email, setEmail] = useState('');
+    const dispatch = useAppDispatch();
+    const sum = orders.map((items)=> items.quantity).reduce((acc,val)=>acc+val, 0)
     const {updateQuantity, items, total} = useCart();
 
     useEffect(()=>{
@@ -18,32 +22,44 @@ export const Cart = ({isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
         const storedOrder = localStorage.getItem('items')
         if(storedOrder){
             setOrders(JSON.parse(storedOrder) ?? [])
-            console.log(JSON.parse(storedOrder))
         }
         const storedSum = localStorage.getItem('total')
         if(storedSum){
             setTotalPrice(Number(storedSum) ?? 0);
         }
-        
+        setEmail(session?.user.email ?? '');
     }, [items]);
 
     const checkOut = (event : any) =>{
         event.preventDefault();
-        localStorage.setItem('items', JSON.stringify([]));
-        localStorage.setItem('total', String(0));
-        const storedOrder = localStorage.getItem('items')
-        if(storedOrder){
-            setOrders([])
-        }
-        const storedSum = localStorage.getItem('total')
-        if(storedSum){
-            setTotalPrice(0);
-        }
-        console.log('chckout');
+            if(!session){
+                const cart_id = crypto.randomUUID()
+                dispatch(addOrder({cart_id, email, quantity: sum, totalPrice, role: 'guest'}));
+                {orders.map((items)=>{
+                    const total = items.product.price * items.quantity
+                    dispatch(addOrderList({total, quantity: items.quantity, name: items.product.name, cart_id, order_id: items.id , product_id: items.product.id}));
+                })}
+                localStorage.setItem('items', JSON.stringify([]));
+                localStorage.setItem('total', String(0));
+            }else{
+                const cart_id = crypto.randomUUID()
+                dispatch(addOrder({cart_id, email, quantity: sum, totalPrice, role: session.user.role}));
+                {orders.map((items)=>{
+                    const total = items.product.price * items.quantity
+                    dispatch(addOrderList({total, quantity: items.quantity, name: items.product.name, cart_id, order_id: items.id , product_id: items.product.id}));
+                })}
+                localStorage.setItem('items', JSON.stringify([]));
+                localStorage.setItem('total', String(0));
+            }
+            const storedOrder = localStorage.getItem('items');
+            if(storedOrder){
+                setOrders([])
+            }
+            const storedSum = localStorage.getItem('total')
+            if(storedSum){
+                setTotalPrice(0);
+            }
     }
-
-    const sum = orders.map((items)=> items.quantity).reduce((acc,val)=>acc+val, 0)
-
     
     return(
     <div>
@@ -93,7 +109,7 @@ export const Cart = ({isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
             <form onSubmit={checkOut} className="relative flex flex-col w-[40vh] min-h-screen pt-24 max-sm:hidden gap-2">
                 <h1 className="text-xl font-bold">Summary</h1>
                 <h1 className="text-md">Email</h1>
-                <input type='email' className="border p-2 rounded-md focus:outline-hidden" placeholder="Put your email here.." required/>
+                <input type='email' onChange={(e)=>setEmail(e.target.value)} value={email} className="border p-2 rounded-md focus:outline-hidden" placeholder="Put your email here.." required/>
                 <p className="text-xs text-foreground/50">Note: The email you will put here will be the one who will receive the invoice from our store email, but if you are signed in as authenticated user we will use that account's email instead.</p>
                 <div className="flex flex-row justify-between mt-4">
                     <p className="text-sm">Quantity</p>

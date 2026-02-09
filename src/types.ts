@@ -83,6 +83,7 @@ export type CartProps ={
     isScrolled: boolean
     isDarkMode: boolean
     setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>
+    session: Session | undefined
 }
 
 export type SideBarProp = {

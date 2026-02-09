@@ -42,10 +42,6 @@ const CartProvider = ({children} : PropsWithChildren)=>{
         .filter((item)=> item.quantity > 0))
     }
 
-    const clearCart = ()=>{
-        setItems([]);
-    }
-
     // Create a checkout logic
 
     return (

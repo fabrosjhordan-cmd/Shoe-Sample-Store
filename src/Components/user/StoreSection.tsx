@@ -9,7 +9,6 @@ import { fetchData } from "../../newProductSlice";
 
 export const StoreSection = () =>{
     const shoes = useAppSelector((state)=> state.product.items);
-    const isLoading = useAppSelector((state) => state.product.loading);
     const dispatch = useAppDispatch()
     const {addItem} = useCart();
     const [currentPage, setCurrentPage] = useState<number>(()=>{
@@ -30,11 +29,8 @@ export const StoreSection = () =>{
     }
 
     useEffect(()=>{
-        dispatch(fetchData());
-    }, [])
-
-    useEffect(()=>{
        sessionStorage.setItem('page', String(currentPage));
+       dispatch(fetchData());
     }, [currentPage]);
 
 
