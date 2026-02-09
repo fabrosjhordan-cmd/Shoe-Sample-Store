@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import type { NewProductProps } from "../../types"
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { BiChevronLeft } from "react-icons/bi";
-import { addProduct } from "../../newProductSlice";
+import { addProduct, fetchData, updateProduct } from "../../newProductSlice";
 
 export const NewProducts = ({id, isEditing, setScreen} : NewProductProps)=>{
     const shoes = useAppSelector((state)=> state.product.items);
-    const mapped = shoes.find((prod)=> prod.id === id);
+    const mapped = shoes.find((prod)=> prod.id === id); 
     const [productName, setProductName] = useState('');
     const [brand, setBrand] = useState('');
     const [gender, setGender] = useState('');
@@ -14,28 +14,35 @@ export const NewProducts = ({id, isEditing, setScreen} : NewProductProps)=>{
     const dispatch = useAppDispatch();
 
     useEffect(()=>{
-        if(isEditing){
-            setProductName(mapped?.name ?? '');
-            setPrice(mapped?.price ?? 1);
-            setBrand(mapped?.brand ?? '');
-            setGender(mapped?.gender ?? '');
-        }else{
-            setProductName('');
-            setPrice(99999);
-            setBrand('');
-            setGender('');
-        }
-    }, [isEditing,id])
+        dispatch(fetchData());
+    }, []);
+
+    useEffect(()=>{
+            if(isEditing){  
+                setProductName(mapped?.name ?? '');
+                setPrice(mapped?.price ?? 1);
+                setBrand(mapped?.brand ?? '');
+                setGender(mapped?.gender ?? '');
+            }else{
+                setProductName('');
+                setPrice(99999);
+                setBrand('');
+                setGender('');
+            }
+    }, [isEditing, shoes])
 
 
     const handleSubmit = async (event : any) =>{
         event.preventDefault();
-        if(productName.trim() === '' || brand.trim() === '' || gender.trim() === '')
+        if(productName.trim() === '' || brand.trim() === '' || gender.trim() === ''){
+            console.log("There shouldn't be empty input")
+        }
         if(isEditing){
-            console.log('will edit');
+            dispatch(updateProduct({productName, brand, gender, price, id}));
+            setScreen('products');
         }else{
             dispatch(addProduct({productName, brand, gender, price}));
-            sessionStorage.setItem('screen', 'products')
+            setScreen('products');
         }
     }
     // create a loading state
@@ -55,7 +62,7 @@ export const NewProducts = ({id, isEditing, setScreen} : NewProductProps)=>{
                     <input onChange={(e)=>setProductName(e.target.value)} value={productName} className="w-full border rounded-md px-4 py-1 focus:outline-hidden" placeholder="Product Name.." required/>
                 </div>
                 
-                <div className="flex flex-row items-center justify-between">
+                <div className="grid grid-cols-2 gap-4 items-center justify-between">
                     <div className="flex flex-col">
                         <label className="font-bold">Product Brand</label>
                         <input onChange={(e)=>setBrand(e.target.value)} value={brand} className="border rounded-md px-4 py-1 focus:outline-hidden" placeholder="Product Brand.." required/>

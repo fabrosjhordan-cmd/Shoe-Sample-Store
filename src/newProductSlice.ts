@@ -59,6 +59,19 @@ export const addProduct = createAsyncThunk(
     }
 )
 
+export const updateProduct = createAsyncThunk(
+    'product/updateProduct',
+    async({id, productName, brand, gender, price} : {id: number, productName: string, brand: string, gender: string, price: number}, thunkAPI)=>{
+        try{
+            const {data, error} = await supabase.from('products').update({name: productName, brand: brand, gender: gender, price: price}).eq('id',id).select().single()
+            if(error) throw error
+            return data;
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+)
+
 // reducer
 
 const newProductSlice = createSlice({
@@ -78,6 +91,10 @@ const newProductSlice = createSlice({
         .addCase(addProduct.fulfilled, (state, action)=>{
             state.loading = false
             state.items =action.payload
+        })
+        .addCase(updateProduct.fulfilled, (state, action)=>{
+            state.loading = false
+            state.items = action.payload
         })
      }
 })

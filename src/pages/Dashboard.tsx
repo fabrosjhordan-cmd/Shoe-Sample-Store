@@ -12,8 +12,14 @@ import { useAppSelector } from "../hooks"
 import { Loader } from "../Components/user/Loader"
 
 export const DashBoard = ({session, isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
-    const [id, setId] = useState(0);
-    const [isEditing, setIsEditing] = useState(false);
+    const [id, setId] = useState(()=>{
+        const storedId = sessionStorage.getItem('id')
+        return storedId ? Number(storedId) : 0
+    });
+    const [isEditing, setIsEditing] = useState(()=>{
+        const storedEdit = sessionStorage.getItem('edit');
+        return storedEdit ? Boolean(storedEdit) : false
+    });
     const [screen, setScreen] = useState<any>(()=>{
         const storedScreen = sessionStorage.getItem('screen');
         return storedScreen ? storedScreen : 'home'
@@ -23,7 +29,10 @@ export const DashBoard = ({session, isScrolled, isDarkMode, setIsDarkMode} : Hom
 
     useEffect(()=>{
         sessionStorage.setItem('screen', screen);
-    }, [screen])
+        sessionStorage.setItem('edit', String(isEditing));
+        sessionStorage.setItem('id', String(id));
+    }, [screen, isEditing]);
+
     // if(!session){
     //     nav('/');
     // }

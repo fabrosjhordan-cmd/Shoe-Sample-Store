@@ -4,10 +4,10 @@ import { CiEdit } from "react-icons/ci";
 import type { ProductListProps } from "../../types";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchData } from "../../newProductSlice";
-import { Loader } from "../user/Loader";
 
 export const Products = ({setId, setIsEditing, setScreen} : ProductListProps) =>{
     const shoes = useAppSelector((state)=> state.product.items);
+    const storedShoe = Array.isArray(shoes) ? shoes : [];
     const dispatch = useAppDispatch()
     const [currentPage, setCurrentPage] = useState<number>(()=>{
             const storedPage : any = sessionStorage.getItem('pageAdmin')
@@ -15,11 +15,11 @@ export const Products = ({setId, setIsEditing, setScreen} : ProductListProps) =>
         });
         const itemsPerPage = 10;
         const numberedPage : any[] = []
-    
+        
         const lastIndex = currentPage * itemsPerPage
         const firstIndex = lastIndex - itemsPerPage;
         const totalPage = Math.ceil(shoes.length / itemsPerPage);
-        const productsPage = shoes.slice(firstIndex, lastIndex);
+        const productsPage = storedShoe.slice(firstIndex, lastIndex);
 
          for(let i : number = 0; i  < totalPage; i++){
             numberedPage.push(i);
