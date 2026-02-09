@@ -55,7 +55,7 @@ export type StoreProps = {
 
 export type CartItem = {
     id: string
-    product: ProductProps
+    product: Tables<'products'>
     product_id: number
     title: string
     brand: string
@@ -74,7 +74,7 @@ export type CartType = {
 
 export type Orders = {
     id: string
-    product: ProductProps
+    product: Tables<'products'>
     quantity: number
 }
 
@@ -86,10 +86,10 @@ export type CartProps ={
 }
 
 export type SideBarProp = {
-    setActiveSection: React.Dispatch<React.SetStateAction<"home" | "products" | "orders">>
+     setScreen: React.Dispatch<React.SetStateAction<"home" | "products" | "orders" | "settings" | "newProduct">>
 }
 
-export type Section = "home" | "products" | "orders";
+export type Section = "home" | "products" | "orders" | "settings" | "newProduct";
 
 export type SideBarLink = {
   label: string;
@@ -100,11 +100,13 @@ export type SideBarLink = {
 export type ProductListProps = {
     setId: React.Dispatch<React.SetStateAction<number>>
     setIsEditing: React.Dispatch<React.SetStateAction<boolean>>
+    setScreen: React.Dispatch<React.SetStateAction<"home" | "products" | "orders" | "settings" | "newProduct">>
 }
 
 export type NewProductProps = {
     id: number
     isEditing: boolean
+    setScreen: React.Dispatch<React.SetStateAction<"home" | "products" | "orders" | "settings" | "newProduct">>
 }
 
 export type initialStateProps ={
@@ -112,3 +114,5 @@ export type initialStateProps ={
     loading: boolean
     error: string | null
 }
+
+export const defaultShoeImage = 'https://imgs.search.brave.com/6aMZmWrpV715g9FN5lfgcWj3O1hON1r8PfWra6g5qSM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMS5z/bmRjZG4uY29tL2Fy/dHdvcmtzLUcxRWNR/YkR6TGVFRzIzSzkt/N1FTVFZRLXQxMDgw/eDEwODAuanBn'

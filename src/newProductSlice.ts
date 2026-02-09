@@ -18,7 +18,7 @@ export const fetchData = createAsyncThunk(
 )
 
 
-// Make this for order....
+// Make this for orders by user....
 export const fetchByUser = createAsyncThunk(
     'product/user',
     async(user_id, thunkAPI) =>{
@@ -32,12 +32,39 @@ export const fetchByUser = createAsyncThunk(
     }
 )
 
+export const addOrder = createAsyncThunk(
+    'product/addOrder',
+    async(items, thunkAPI) =>{
+        try{
+            const {data, error} = await supabase.from('orders').insert(items).select()
+            if(error) throw error
+            console.log(data)
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+)
+
+export const addProduct = createAsyncThunk(
+    'product/addProduct',
+    async({productName, brand, gender, price}:{productName: string, brand: string, gender: string, price: number}, thunkAPI) =>{
+        try{
+            const {data, error} = await supabase.from('products').insert({name: productName, brand: brand, gender: gender, price: price}).select();
+            if(error) throw error
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+)
+
+// reducer
 
 const newProductSlice = createSlice({
     name: 'product',
     initialState,
     reducers: {
-        
     },
      extraReducers: (builders) =>{
         builders
@@ -47,6 +74,10 @@ const newProductSlice = createSlice({
         .addCase(fetchData.fulfilled, (state, action)=>{
             state.loading = false
             state.items = action.payload
+        })
+        .addCase(addProduct.fulfilled, (state, action)=>{
+            state.loading = false
+            state.items =action.payload
         })
      }
 })

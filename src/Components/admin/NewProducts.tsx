@@ -1,37 +1,48 @@
 import { useEffect, useState } from "react";
-import { ProductList } from "../../api/others/dummy"
 import type { NewProductProps } from "../../types"
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { BiChevronLeft } from "react-icons/bi";
+import { addProduct } from "../../newProductSlice";
 
-export const NewProducts = ({id, isEditing} : NewProductProps)=>{
-    const shoes = ProductList;
+export const NewProducts = ({id, isEditing, setScreen} : NewProductProps)=>{
+    const shoes = useAppSelector((state)=> state.product.items);
     const mapped = shoes.find((prod)=> prod.id === id);
     const [productName, setProductName] = useState('');
     const [brand, setBrand] = useState('');
     const [gender, setGender] = useState('');
     const [price, setPrice] = useState<number>(1);
+    const dispatch = useAppDispatch();
 
     useEffect(()=>{
         if(isEditing){
-            setProductName(mapped?.title ?? '');
-            setPrice(mapped?.avg_price ?? 1);
+            setProductName(mapped?.name ?? '');
+            setPrice(mapped?.price ?? 1);
             setBrand(mapped?.brand ?? '');
             setGender(mapped?.gender ?? '');
         }else{
             setProductName('');
-            setPrice(1);
+            setPrice(99999);
             setBrand('');
             setGender('');
         }
     }, [isEditing,id])
 
-    const handleSubmit = (event : any) =>{
+
+    const handleSubmit = async (event : any) =>{
         event.preventDefault();
+        if(productName.trim() === '' || brand.trim() === '' || gender.trim() === '')
+        if(isEditing){
+            console.log('will edit');
+        }else{
+            dispatch(addProduct({productName, brand, gender, price}));
+            sessionStorage.setItem('screen', 'products')
+        }
     }
     // create a loading state
 
     return(
     <div id="new" className="max-sm:hidden flex flex-col  min-h-screen overflow-hidden py-10">
-        <a href="dashboard#products" className="container">Back</a>
+        <p onClick={()=>setScreen('products')} className="flex items-center gap-2 hover:cursor-pointer hover:text-foreground/50 text-primary/80 hover:underline"><span><BiChevronLeft size={25} /></span>Back</p>
         <div className="grid grid-cols-2 h-full">
            <form onSubmit={handleSubmit} className="container flex flex-col py-4 gap-4">
             <h1 className="text-4xl">{isEditing ? "Edit Product" : "Create New Product"}</h1>
@@ -41,23 +52,23 @@ export const NewProducts = ({id, isEditing} : NewProductProps)=>{
                 </div>
                 <div className="flex flex-col w-full">
                     <label className="font-bold">Product Name</label>
-                    <input onChange={(e)=>setProductName(e.target.value)} value={productName} className="w-full border rounded-md px-4 py-1 focus:outline-hidden" placeholder="Product Name.." />
+                    <input onChange={(e)=>setProductName(e.target.value)} value={productName} className="w-full border rounded-md px-4 py-1 focus:outline-hidden" placeholder="Product Name.." required/>
                 </div>
                 
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-col">
                         <label className="font-bold">Product Brand</label>
-                        <input onChange={(e)=>setBrand(e.target.value)} value={brand} className="border rounded-md px-4 py-1 focus:outline-hidden" placeholder="Product Brand.." />
+                        <input onChange={(e)=>setBrand(e.target.value)} value={brand} className="border rounded-md px-4 py-1 focus:outline-hidden" placeholder="Product Brand.." required/>
                     </div>
                     <div className="flex flex-col">
                         <label className="font-bold">Gender</label>
-                        <input onChange={(e)=>setGender(e.target.value)} value={gender} className="border rounded-md px-4 py-1 focus:outline-hidden" placeholder="Gender..." />
+                        <input onChange={(e)=>setGender(e.target.value)} value={gender} className="border rounded-md px-4 py-1 focus:outline-hidden" placeholder="Gender..." required/>
                     </div>
                 </div>
 
                 <div className="flex flex-col">
                     <label className="font-bold">Price</label>
-                    <input type='number' onChange={(e)=>setPrice(parseFloat(e.target.value))} value={price} className="border rounded-md px-4 py-1 focus:outline-hidden" placeholder="₱ 0.00..." />
+                    <input type='number' onChange={(e)=>setPrice(parseFloat(e.target.value))} value={price} className="border rounded-md px-4 py-1 focus:outline-hidden" placeholder="₱ 0.00..." required/>
                 </div>
                 <div className="flex w-full items-center justify-center">
                     <button className="bg-primary/70 px-4 py-2 rounded-md">{isEditing ? 'Update Product' : 'Create Product'}</button>

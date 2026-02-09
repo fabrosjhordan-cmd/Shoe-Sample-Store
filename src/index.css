@@ -134,10 +134,14 @@
 }
 
 @utility dashboard-screen {
-    @apply w-full flex flex-col md:pl-75 pl-4 pr-4;
+    @apply h-screen overflow-y-hidden w-full flex flex-col md:pl-75 pl-4 pr-4;
 }
 
 /* Create a dropdown */
 @utility dropdown {
   @apply relative
+}
+
+@utility snap-y {
+  scroll-snap-type: y var(--tw-scroll-snap-strictness);
 }

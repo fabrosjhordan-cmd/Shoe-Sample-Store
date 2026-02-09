@@ -14,7 +14,7 @@ const CartProvider = ({children} : PropsWithChildren)=>{
         return storedItems ? JSON.parse(storedItems) : []
     })
     
-    const total = items.reduce((sum, item) => sum + item.product.avg_price * item.quantity, 0)
+    const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
     
     useEffect(()=>{
         localStorage.setItem('items', JSON.stringify(items));

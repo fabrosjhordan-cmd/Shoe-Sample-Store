@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import { ProductList } from "../../api/others/dummy"
 import { FaChevronLeft, FaChevronRight, FaPlus } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import type { ProductListProps } from "../../types";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { fetchData } from "../../newProductSlice";
+import { Loader } from "../user/Loader";
 
-export const Products = ({setId, setIsEditing} : ProductListProps) =>{
-    const shoes = ProductList;
+export const Products = ({setId, setIsEditing, setScreen} : ProductListProps) =>{
+    const shoes = useAppSelector((state)=> state.product.items);
+    const dispatch = useAppDispatch()
     const [currentPage, setCurrentPage] = useState<number>(()=>{
             const storedPage : any = sessionStorage.getItem('pageAdmin')
             return storedPage ? Number(storedPage) : 1;
         });
         const itemsPerPage = 10;
         const numberedPage : any[] = []
-    
     
         const lastIndex = currentPage * itemsPerPage
         const firstIndex = lastIndex - itemsPerPage;
@@ -25,6 +27,7 @@ export const Products = ({setId, setIsEditing} : ProductListProps) =>{
 
         useEffect(()=>{
                sessionStorage.setItem('pageAdmin', String(currentPage));
+               dispatch(fetchData());
             }, [currentPage]);
 
         const pageSetter = (direction : any) =>{
@@ -39,7 +42,7 @@ export const Products = ({setId, setIsEditing} : ProductListProps) =>{
         <div id="products" className="flex flex-col min-h-screen py-10 gap-4 overflow-y-hidden">
             <h1 className="text-4xl">Product List</h1>
             <div className="flex flex-row items-center justify-between">
-                <a href="dashboard#new" onClick={()=>setIsEditing(false)} className="flex items-center gap-8 px-6 py-2 bg-primary/40 hover:bg-primary/60 rounded-lg"><FaPlus /> New</a>
+                <button onClick={()=>{setIsEditing(false), setScreen('newProduct')}} className="flex items-center gap-8 px-6 py-2 bg-primary/40 hover:bg-primary/60 rounded-lg"><FaPlus /> New</button>
                 <input type="text" className="border rounded-lg px-2 py-1 focus:outline-hidden" placeholder="Search.." />
             </div>
             {/* lists */}
@@ -47,12 +50,12 @@ export const Products = ({setId, setIsEditing} : ProductListProps) =>{
                 {productsPage.map((product)=>(
                     <div key={product.id} className="flex flex-col gap-2 bg-card group overflow-hidden rounded-lg shadow-xs card-hover px-2 py-1">
                         <div className="h-30 overflow-hidden mb-4">
-                            <img src={product.image} className="w-full h-full rounded-md" />
+                            <img src={product.image ? product.image : ''} className="w-full h-full rounded-md" />
                         </div>
                         {/* Title */}
                         <div className="relative">
-                            <div className="peer h-8 font-medium text-lg overflow-hidden">{product.title}</div>
-                            <div className="absolute left-0 bottom-full z-50 mt-1 hidden max-w-xs rounded bg-black px-2 py-1 text-sm text-white peer-hover:block">{product.title}</div>
+                            <div className="peer h-8 font-medium text-lg overflow-hidden">{product.name}</div>
+                            <div className="absolute left-0 bottom-full z-50 mt-1 hidden max-w-xs rounded bg-black px-2 py-1 text-sm text-white peer-hover:block">{product.name}</div>
                         </div>
                         {/* Gnder */}
                         <div className="relative">
@@ -61,8 +64,8 @@ export const Products = ({setId, setIsEditing} : ProductListProps) =>{
                         </div>
                         {/* Price */}
                         <div className="flex flex-row items-center justify-between mt-auto">
-                            <h1 className="text-sm text-primary/90">₱ {product.avg_price.toFixed(2)}</h1>
-                            <a href='dashboard#new' onClick={()=>{setId(product.id), setIsEditing(true)}} className="hover:text-primary"><CiEdit size={23}/></a>
+                            <h1 className="text-sm text-primary/90">₱ {product.price.toFixed(2)}</h1>
+                            <button onClick={()=>{setId(product.id), setIsEditing(true), setScreen('newProduct')}} className="hover:text-primary"><CiEdit size={23}/></button>
                         </div>
                     </div>
                 ))}

@@ -1,16 +1,15 @@
 import { BiHome } from "react-icons/bi"
-import { FaListUl, FaShoppingCart, FaUserTie  } from "react-icons/fa"
+import { FaListUl, FaShoppingCart  } from "react-icons/fa"
 import { FaGears } from "react-icons/fa6"
 
 const SideBarLinks = [
-    {href: '/dashboard#home', label: 'Home', icon: <BiHome size={20} />},
-    {href: '/dashboard#products', label: 'Products', icon: <FaListUl size={20} /> },
-    {href: '/dashboard#orders', label: 'Orders', icon: <FaShoppingCart size={20} /> },
-    // {href: '/dashboard#employees', label: 'Employee', icon: <FaUserTie size={20} /> },
-    {href: '/dashboard#settings', label: 'Settings', icon: <FaGears size={20} /> },
+    {href: 'home', label: 'Home', icon: <BiHome size={20} />},
+    {href: 'products', label: 'Products', icon: <FaListUl size={20} /> },
+    {href: 'orders', label: 'Orders', icon: <FaShoppingCart size={20} /> },
+    {href: 'settings', label: 'Settings', icon: <FaGears size={20} /> },
 ]
  
-export const SideBar =()=>{
+export const SideBar =({setScreen} : any)=>{
     return (
         <nav className="min-h-screen max-sm:hidden fixed z-40 transition-all duration-300 py-10 bg-primary/15 w-[35vh]">
             <div className="flex flex-col items-center justify-center">
@@ -23,9 +22,9 @@ export const SideBar =()=>{
 
                 <div className="mx-auto mt-10 flex flex-col space-y-3 w-full text-left">
                     {SideBarLinks.map((page, key)=>(
-                        <a href={page.href} key={key} className="sidebar-button">
+                        <button onClick={()=>setScreen(page.href)} key={key} className="sidebar-button">
                             {page.icon}{page.label}
-                        </a>
+                        </button>
                     ))}
                 </div>
 

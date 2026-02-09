@@ -27,7 +27,8 @@ export const Cart = ({isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
         
     }, [items]);
 
-    const checkOut = () =>{
+    const checkOut = (event : any) =>{
+        event.preventDefault();
         localStorage.setItem('items', JSON.stringify([]));
         localStorage.setItem('total', String(0));
         const storedOrder = localStorage.getItem('items')
@@ -40,6 +41,9 @@ export const Cart = ({isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
         }
         console.log('chckout');
     }
+
+    const sum = orders.map((items)=> items.quantity).reduce((acc,val)=>acc+val, 0)
+
     
     return(
     <div>
@@ -63,14 +67,14 @@ export const Cart = ({isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
                 : 
                 orders.map((items)=>(
                     <div key={items.id} className="flex flex-row w-full bg-foreground/4 px-3 py-4 my-2 max-sm:flex-col gap-2 rounded-lg">
-                        <img src={items.product.image} className="h-40 w-50 max-sm:w-full max-sm:h-60 rounded-lg" />
+                        <img src={items.product.image ? items.product.image : ''} className="h-40 w-50 max-sm:w-full max-sm:h-60 rounded-lg" />
                         <div className="flex max-sm:flex-col gap-3 flex-row justify-between lg:gap-32 w-full">
                             <div className="flex flex-col">
-                            <h1 className="text-xl font-bold">{items.product.title}</h1>
+                            <h1 className="text-xl font-bold">{items.product.name}</h1>
                             <p>{items.product.gender}</p>
                         </div>
                         <div className="flex flex-col justify-between">
-                            <p className="text-xl font-bold">₱ {(items.product.avg_price * items.quantity).toFixed(2)}</p>
+                            <p className="text-xl font-bold">₱ {(items.product.price * items.quantity).toFixed(2)}</p>
                             <div className="flex flex-row justify-between border border-foreground/30 rounded-full px-3 py-2">
                                 {items.quantity > 1 ? <button><BiMinus onClick={()=>updateQuantity(items.id, -1)} size={25} /></button> : <button><BsTrash onClick={()=>updateQuantity(items.id, -1)} size={25} /></button>}
                                 <p>{items.quantity}</p>
@@ -86,14 +90,23 @@ export const Cart = ({isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
             </div>   
             
             {/* Summary */}
-            <div className="relative flex flex-col w-[40vh] min-h-screen pt-24 max-sm:hidden gap-6">
+            <form onSubmit={checkOut} className="relative flex flex-col w-[40vh] min-h-screen pt-24 max-sm:hidden gap-2">
                 <h1 className="text-xl font-bold">Summary</h1>
+                <h1 className="text-md">Email</h1>
+                <input type='email' className="border p-2 rounded-md focus:outline-hidden" placeholder="Put your email here.." required/>
+                <p className="text-xs text-foreground/50">Note: The email you will put here will be the one who will receive the invoice from our store email, but if you are signed in as authenticated user we will use that account's email instead.</p>
+                <div className="flex flex-row justify-between mt-4">
+                    <p className="text-sm">Quantity</p>
+                    <div className="text-sm">
+                        <p>{sum} Pair</p>
+                    </div>
+                </div>
                 <div className="flex flex-row justify-between">
                     <p className="text-lg font-semibold">Total</p>
                     <p className="text-lg font-semibold">₱ {totalPrice.toFixed(2)}</p>
                 </div>
-                <button onClick={checkOut} className="py-5 bg-primary text-xl font-semibold hover:bg-primary/70 rounded-full">Checkout</button>
-            </div>
+                <button className="py-5 bg-primary text-xl font-semibold hover:bg-primary/70 rounded-full">Checkout</button>
+            </form>
         </div>
     </div>
     )

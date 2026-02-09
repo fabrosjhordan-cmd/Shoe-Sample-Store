@@ -1,6 +1,9 @@
 import { useState } from "react"
 import { BiCart, BiMenu, BiX } from "react-icons/bi";
 import type { NavProps } from "../../types";
+import { FaUserCog } from "react-icons/fa";
+import { useAuth } from "../../provider/AuthProvider";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 const NavLinks = [
     {href: '/#hero', label: 'Home'},
@@ -9,6 +12,7 @@ const NavLinks = [
 ]
 export const NavBar = ({isScrolled} : NavProps) =>{
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const {session} = useAuth();
 
     return(
     <nav className={`fixed w-full z-40 transition-all duration-300 ${isScrolled ? 'py-2 bg-background/80 backdrop-blur-md shadow-md' : 'py-5'}`}>
@@ -30,7 +34,13 @@ export const NavBar = ({isScrolled} : NavProps) =>{
             
             <div className=" flex items-center gap-6" >
                 <a href="cart"><BiCart size={20} className="hover:text-primary hover:text-glow"/></a>
-                <a href="login" className="px-6 py-2 bg-primary/70 hover:bg-primary/50 hover:text-foreground/70 rounded-full max-sm:hidden">Sign In</a>
+                {!session ? <a href="login" className="px-6 py-2 bg-primary/70 hover:bg-primary/50 hover:text-foreground/70 rounded-full max-sm:hidden">Sign In</a>  
+                : 
+                <a href='#' className="flex flex-row items-center px-1 py-2">
+                    <FaUserCog size={20} />
+                    <span><IoMdArrowDropdown size={20} /></span>
+                </a>
+                }
             </div>
 
             <button className="md:hidden z-50">
