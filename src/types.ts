@@ -112,8 +112,14 @@ export type NewProductProps = {
 
 export type initialStateProps ={
     items: Tables<'products'>[]
+    sales: Tables<'sales'>[]
+    shipping: Tables<'sales'>[]
+    packaging: Tables<'sales'>[]
     loading: boolean
     error: string | null
 }
 
-export const defaultShoeImage = 'https://imgs.search.brave.com/6aMZmWrpV715g9FN5lfgcWj3O1hON1r8PfWra6g5qSM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMS5z/bmRjZG4uY29tL2Fy/dHdvcmtzLUcxRWNR/YkR6TGVFRzIzSzkt/N1FTVFZRLXQxMDgw/eDEwODAuanBn'
+
+export const defaultShoeImage = 'https://imgs.search.brave.com/6aMZmWrpV715g9FN5lfgcWj3O1hON1r8PfWra6g5qSM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMS5z/bmRjZG4uY29tL2Fy/dHdvcmtzLUcxRWNR/YkR6TGVFRzIzSzkt/N1FTVFZRLXQxMDgw/eDEwODAuanBn';
+
+export const tableHeader = ['Date', 'Status', 'Order ID','Email', 'Role', 'Address', 'Quantity', 'Action']

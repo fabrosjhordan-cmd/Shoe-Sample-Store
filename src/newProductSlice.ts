@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { supabase } from "./supabaseClient";
 import type { initialStateProps } from "./types";
 
-const initialState : initialStateProps= {items: [], loading: false, error: null}
+const initialState : initialStateProps= {items: [], sales: [], shipping: [], packaging: [], loading: false, error: null}
 
 export const fetchData = createAsyncThunk(
     'product/fetchData',
@@ -83,6 +83,45 @@ export const updateProduct = createAsyncThunk(
     }
 )
 
+export const viewSales = createAsyncThunk(
+    'sales/viewSales',
+    async(_, thunkAPI)=>{
+        try{
+            const {data, error} = await supabase.from('sales').select('*').order('created_at', {ascending: false});
+            if(error) throw error
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+)
+
+export const viewAllStatusShip = createAsyncThunk(
+    'sales/viewAllStatus',
+    async(_, thunkAPI) =>{
+        try{
+            const {data, error} = await supabase.from('sales').select('*').eq('status', 'Shipping').order('created_at', {ascending:false})
+            if(error) throw error
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+) 
+
+export const viewAllStatusPackaging = createAsyncThunk(
+    'sales/viewAllStatusPackaging',
+    async(_, thunkAPI) =>{
+        try{
+            const {data, error} = await supabase.from('sales').select('*').eq('status', 'Packaging').order('created_at', {ascending:false})
+            if(error) throw error
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+) 
+
 // reducer
 
 const newProductSlice = createSlice({
@@ -115,7 +154,40 @@ const newProductSlice = createSlice({
             state.loading = false
             state.items = action.payload
         })
+        
+        
      }
 })
 
-export default newProductSlice.reducer
+const newSalesSlice = createSlice({
+    name: 'sales',
+    initialState,
+    reducers:{},
+    extraReducers: (builders) =>{
+        builders
+         .addCase(viewSales.pending, state =>{
+            state.loading =true
+        })
+        .addCase(viewSales.fulfilled, (state, action)=>{
+            state.loading = false
+            state.sales = action.payload
+        })
+        .addCase(viewAllStatusShip.pending, state=>{
+            state.loading = true
+        })
+        .addCase(viewAllStatusShip.fulfilled, (state, action)=>{
+            state.loading = false
+            state.shipping = action.payload
+        })
+        .addCase(viewAllStatusPackaging.pending, state=>{
+            state.loading = true
+        })
+        .addCase(viewAllStatusPackaging.fulfilled, (state, action)=>{
+            state.loading = false
+            state.packaging = action.payload
+        })
+    }
+})
+
+export const productReducer = newProductSlice.reducer
+export const salesReducer = newSalesSlice.reducer

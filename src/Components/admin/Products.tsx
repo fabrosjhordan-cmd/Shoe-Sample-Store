@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchData } from "../../newProductSlice";
 
 export const Products = ({setId, setIsEditing, setScreen} : ProductListProps) =>{
-    const shoes = useAppSelector((state)=> state.product.items);
+    const shoes = useAppSelector((state)=> state?.product.items);
     const storedShoe = Array.isArray(shoes) ? shoes : [];
     const dispatch = useAppDispatch()
     const [currentPage, setCurrentPage] = useState<number>(()=>{
@@ -57,7 +57,7 @@ export const Products = ({setId, setIsEditing, setScreen} : ProductListProps) =>
                             <div className="peer h-8 font-medium text-lg overflow-hidden">{product.name}</div>
                             <div className="absolute left-0 bottom-full z-50 mt-1 hidden max-w-xs rounded bg-black px-2 py-1 text-sm text-white peer-hover:block">{product.name}</div>
                         </div>
-                        {/* Gnder */}
+                        {/* Gender */}
                         <div className="relative">
                             <div className="peer h-8 text-sm text-foreground/60 capitalize overflow-hidden">{product.gender}</div>
                             <div className="absolute left-0 bottom-full z-50 mt-1 hidden max-w-xs rounded bg-black px-2 py-1 text-sm text-white peer-hover:block">{product.gender}</div>

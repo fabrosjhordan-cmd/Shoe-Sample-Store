@@ -1,14 +1,25 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Loader } from "../Components/user/Loader";
 import { supabase } from "../supabaseClient";
 import { ThemeToggle } from "../Components/ThemeToggle";
 import type { ThemeProps } from "../types";
 import { BiChevronLeft } from "react-icons/bi";
+import { useAuth } from "../provider/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export const SignIn = ({isDarkMode, isScrolled, setIsDarkMode}: ThemeProps) =>{
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const {session} = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(session){
+            navigate('/', {replace: true});
+            console.log('hydrated')
+        }
+    }, [session])
 
     const handleLogin = async (event : any) =>{
         event?.preventDefault()
@@ -31,7 +42,6 @@ export const SignIn = ({isDarkMode, isScrolled, setIsDarkMode}: ThemeProps) =>{
     return (
     <div className="container md:px-24 flex flex-col items-center justify-center min-h-screen gap-9">
         <ThemeToggle isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-
         <div className={`flex text-left w-full md:px-10 lg:px-20 xl:px-80`}>
             <a href='/' className="flex flex-row gap-3 font-bold text-primary text-lg hover:underline hover:text-primary/50"><span><BiChevronLeft size={28}/></span>Back</a>
         </div>

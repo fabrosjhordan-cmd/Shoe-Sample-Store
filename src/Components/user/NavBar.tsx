@@ -4,6 +4,8 @@ import type { NavProps } from "../../types";
 import { FaUserCog } from "react-icons/fa";
 import { useAuth } from "../../provider/AuthProvider";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { supabase } from "../../supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 const NavLinks = [
     {href: '/#hero', label: 'Home'},
@@ -13,6 +15,15 @@ const NavLinks = [
 export const NavBar = ({isScrolled} : NavProps) =>{
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const {session} = useAuth();
+    const navigate = useNavigate();
+
+    const SignOut = async ()=>{
+        const out = await supabase.auth.signOut();
+        if(session){
+            navigate('/', {replace: true});
+            return out
+        }
+    }
 
     return(
     <nav className={`fixed w-full z-40 transition-all duration-300 ${isScrolled ? 'py-2 bg-background/80 backdrop-blur-md shadow-md' : 'py-5'}`}>
@@ -36,10 +47,17 @@ export const NavBar = ({isScrolled} : NavProps) =>{
                 <a href="cart"><BiCart size={20} className="hover:text-primary hover:text-glow"/></a>
                 {!session ? <a href="login" className="px-6 py-2 bg-primary/70 hover:bg-primary/50 hover:text-foreground/70 rounded-full max-sm:hidden">Sign In</a>  
                 : 
-                <a href='#' className="flex flex-row items-center px-1 py-2">
-                    <FaUserCog size={20} />
-                    <span><IoMdArrowDropdown size={20} /></span>
-                </a>
+                <div className="relative group">
+                    <button className="flex flex-row items-center px-1 py-2">
+                        <FaUserCog size={20} />
+                        <span className="transition-transform ease-out duration-200 group-focus-within:rotate-180"><IoMdArrowDropdown size={20} /></span>
+                    </button>
+                    <div className="absolute right-0 top-full z-50 mt-1 hidden flex-col max-w-xs rounded bg-background px-8 py-3 text-sm text-foreground gap-2 shadow-md group-focus-within:flex">
+                        <button className="hover:text-primary">Settings</button>
+                        <button className="hover:text-primary">History</button>
+                        <button onClick={SignOut}className="hover:text-primary">Logout</button>
+                    </div>
+                </div>
                 }
             </div>
 

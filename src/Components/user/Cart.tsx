@@ -12,9 +12,11 @@ export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps
     const [orders, setOrders] = useState<Orders[]>([]); 
     const [totalPrice, setTotalPrice] = useState(0);
     const [email, setEmail] = useState('');
+    const [address, setAddress] = useState('');
     const dispatch = useAppDispatch();
     const sum = orders.map((items)=> items.quantity).reduce((acc,val)=>acc+val, 0)
     const {updateQuantity, items, total} = useCart();
+    const shippingFee = 58
 
     useEffect(()=>{
         localStorage.setItem('items', JSON.stringify(items));
@@ -28,7 +30,7 @@ export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps
             setTotalPrice(Number(storedSum) ?? 0);
         }
         setEmail(session?.user.email ?? '');
-    }, [items]);
+    }, [items, session]);
 
     const checkOut = (event : any) =>{
         event.preventDefault();
@@ -97,7 +99,6 @@ export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps
                                 <button><BsPlus onClick={()=>updateQuantity(items.id, 1)} size={25} /></button>
                             </div>
                         </div>
-
                         </div>
                      </div>
                 ))
@@ -108,8 +109,12 @@ export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps
             {/* Summary */}
             <form onSubmit={checkOut} className="relative flex flex-col w-[40vh] min-h-screen pt-24 max-sm:hidden gap-2">
                 <h1 className="text-xl font-bold">Summary</h1>
-                <h1 className="text-md">Email</h1>
-                <input type='email' onChange={(e)=>setEmail(e.target.value)} value={email} className="border p-2 rounded-md focus:outline-hidden" placeholder="Put your email here.." required/>
+                {/* Email */}
+                <h1 className="text-md font-semibold">Email: </h1>
+                <input type='email' onChange={(e)=>setEmail(e.target.value)} value={email} className="border p-2 rounded-md focus:outline-hidden" placeholder="Put your email here.." readOnly={session ? true : false} required/>
+                {/* Address */}
+                <h1 className="text-md font-semibold">Address: </h1>
+                <input type='text' onChange={(e)=>setAddress(e.target.value)} value={address} className="border p-2 rounded-md focus:outline-hidden" placeholder="Put your address here.." required/>
                 <p className="text-xs text-foreground/50">Note: The email you will put here will be the one who will receive the invoice from our store email, but if you are signed in as authenticated user we will use that account's email instead.</p>
                 <div className="flex flex-row justify-between mt-4">
                     <p className="text-sm">Quantity</p>
@@ -118,8 +123,14 @@ export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps
                     </div>
                 </div>
                 <div className="flex flex-row justify-between">
+                    <p className="text-sm">Shipping Fee</p>
+                    <div className="text-sm">
+                        <p>₱ {shippingFee.toFixed(2)} </p>
+                    </div>
+                </div>
+                <div className="flex flex-row justify-between">
                     <p className="text-lg font-semibold">Total</p>
-                    <p className="text-lg font-semibold">₱ {totalPrice.toFixed(2)}</p>
+                    <p className="text-lg font-semibold">₱ {(totalPrice+shippingFee).toFixed(2)}</p>
                 </div>
                 <button className="py-5 bg-primary text-xl font-semibold hover:bg-primary/70 rounded-full">Checkout</button>
             </form>
