@@ -53,8 +53,7 @@ export const NavBar = ({isScrolled} : NavProps) =>{
                         <span className="transition-transform ease-out duration-200 group-focus-within:rotate-180"><IoMdArrowDropdown size={20} /></span>
                     </button>
                     <div className="absolute right-0 top-full z-50 mt-1 hidden flex-col max-w-xs rounded bg-background px-8 py-3 text-sm text-foreground gap-2 shadow-md group-focus-within:flex">
-                        <button className="hover:text-primary">Settings</button>
-                        <button className="hover:text-primary">History</button>
+                        <a href='profile' className="hover:text-primary">Profile</a>
                         <button onClick={SignOut}className="hover:text-primary">Logout</button>
                     </div>
                 </div>

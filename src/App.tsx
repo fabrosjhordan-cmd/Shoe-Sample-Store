@@ -6,11 +6,12 @@ import { useEffect, useState } from 'react';
 import { SignIn } from './auth/SignIn';
 import { SignUp } from './auth/SignUp';
 import { useAuth } from './provider/AuthProvider';
-import { Cart } from './Components/user/Cart';
+import { Cart } from './pages/Cart';
 import { DashBoard } from './pages/Dashboard';
+import { Profile } from './pages/Profile';
 
 function App() {
-  const {session} = useAuth();
+  const {session, loading} = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
       
@@ -33,6 +34,7 @@ function App() {
           <Route path='signup' element={<SignUp isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
           <Route path='cart' element={<Cart session={session} isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
           <Route path='dashboard' element={<DashBoard session={session} isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />}/>
+          <Route path='profile' element={<Profile loading={loading} session={session} isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
           <Route path='*' element={<NotFound />} />
           
         </Routes>

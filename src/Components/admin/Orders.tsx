@@ -49,7 +49,7 @@ export const Orders = () =>{
                 <button className="flex flex-row items-center gap-3 py-1 px-4 bg-primary/30 rounded-lg text-lg"><FaSortNumericUpAlt />Sort</button>
             </div>
                 {/* Create a pagination */}
-            <table className="container">
+            <table className="container border border-foreground/40">
                     {/* Header */}
                     <thead>
                         <tr className="bg-foreground/10">
@@ -61,7 +61,7 @@ export const Orders = () =>{
                     {/* Body */}
                     <tbody>
                         {salesPage.map((data, index)=>(
-                            <tr key={index}>
+                            <tr key={index} className="border border-foreground/40">
                                 <td className="px-4 py-3 border-r border-foreground/40">{dayjs(data.created_at).format('MMM. D YYYY')}</td>
                                 <td className="px-4 py-3 border-x border-foreground/40">{data.status}</td>
                                 <td className="px-4 py-3 border-x border-foreground/40">{data.cart_id}</td>

@@ -1,12 +1,12 @@
 import { BsPlus, BsTrash } from "react-icons/bs";
-import type { CartProps, Orders } from "../../types";
-import { NavBar } from "./NavBar";
-import { ThemeToggle } from "../ThemeToggle";
+import type { CartProps, Orders } from "../types";
+import { NavBar } from "../Components/user/NavBar";
+import { ThemeToggle } from "../Components/ThemeToggle";
 import { useEffect, useState } from "react";
 import { BiMinus } from "react-icons/bi";
-import { useCart } from "../../provider/CartProvider";
-import { addOrder, addOrderList } from "../../newProductSlice";
-import { useAppDispatch } from "../../hooks";
+import { useCart } from "../provider/CartProvider";
+import { addOrder, addOrderList } from "../newProductSlice";
+import { useAppDispatch } from "../hooks";
 
 export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
     const [orders, setOrders] = useState<Orders[]>([]); 

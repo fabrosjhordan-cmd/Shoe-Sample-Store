@@ -22,13 +22,9 @@ export const AboutIntro= ()=>{
                     <div className="flex flex-col gap-4">
                         <p>This is a personal project created with ReactJS, Typescript, and TailwindCSS with Supabase as its data storage. This application let's the user to order and pay through online.</p>
                         <p>Sample Store is an online ordering website for your cool kicks we offer you different kinds of shoe brands. We offer you just the best of the shoe throughout the market.</p>
-                        <p><span className="font-bold text-red-400">Disclaimer: </span>I do not own any of the shoes nor plan on selling any, the displayed products are only for showing how the list is being viewed. I also do not plan to gain monetarily here and just to showcase my skills on creating a program.</p>
+                        <p><span className="font-bold text-red-400">Disclaimer: </span>I do not own any of these shoes nor plan on selling any of it, the displayed products are only for showing how the list would be viewed. I also do not plan to monetarily gain here and just want to showcase my skills on creating a program.</p>
                     </div>
-                    <h2 className="text-3xl font-semibold">How to use:</h2>
-                        <ul className="ml-4">
-                            <li>- Clicking on add to cart would put your selected item to the cart. (you can see it at the top)</li>
-                            <li>- If you are done shopping then you would need to go to the cart page and checkout and pay through online.</li>
-                        </ul>
+                    
                 </div>
                 <div className="w-140 h-70">
                 <img src='/hero_section.png' className="w-full h-full rounded-md p-4 bg-foreground/20"/>
@@ -46,6 +42,11 @@ export const AboutIntro= ()=>{
                 </div>
                ))}
             </div>
+            <h2 className="text-3xl font-semibold">How to use:</h2>
+            <ul className="ml-4">
+                <li>- Clicking on add to cart would put your selected item to the cart. (you can see it at the top)</li>
+                <li>- If you are done shopping then you would need to go to the cart page and checkout and pay through online.</li>
+            </ul>
         </div>
     )
 }

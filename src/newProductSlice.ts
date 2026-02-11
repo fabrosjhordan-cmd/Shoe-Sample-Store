@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { supabase } from "./supabaseClient";
 import type { initialStateProps } from "./types";
 
-const initialState : initialStateProps= {items: [], sales: [], shipping: [], packaging: [], loading: false, error: null}
+const initialState : initialStateProps= {items: [], sales: [], shipping: [], userSalesList: [],packaging: [], userProfile: [], loading: false, error: null}
 
 export const fetchData = createAsyncThunk(
     'product/fetchData',
@@ -122,6 +122,45 @@ export const viewAllStatusPackaging = createAsyncThunk(
     }
 ) 
 
+export const viewOrdersByUser = createAsyncThunk(
+    'user/viewOrdersByUser',
+    async(user_id : string, thunkAPI) =>{
+        try{
+            const {data, error} = await supabase.from('sales').select('*').eq('user_id', user_id).order('created_at', {ascending:false})
+            if(error) throw error
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+) 
+
+
+export const selectProfile = createAsyncThunk(
+    'user/selectProfile',
+    async(user_id : string, thunkAPI) =>{
+        try{
+            const {data, error} = await supabase.from('profiles').select('*').eq('id', user_id)
+            if(error) throw error
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+) 
+
+export const updateProfile = createAsyncThunk(
+    'user/updateProfile',
+    async({user_id, address, firstName, lastName} :{user_id: string, firstName: string, lastName: string, address: string}, thunkAPI) =>{
+        try{
+            const {data, error} = await supabase.from('profiles').update({address, first_name: firstName, last_name: lastName }).eq('id', user_id).select('*')
+            if(error) throw error
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+) 
 // reducer
 
 const newProductSlice = createSlice({
@@ -189,5 +228,33 @@ const newSalesSlice = createSlice({
     }
 })
 
+const userOrderList = createSlice({
+    name: 'user',
+    initialState,
+    reducers:{},
+    extraReducers: (builders) =>{
+        builders
+        .addCase(viewOrdersByUser.pending, state=>{
+            state.loading = true
+        })
+        .addCase(viewOrdersByUser.fulfilled, (state, action)=>{
+            state.loading = false
+            state.userSalesList = action.payload
+        })
+        .addCase(selectProfile.pending, state=>{
+            state.loading = true
+        })
+        .addCase(selectProfile.fulfilled, (state, action)=>{
+            state.loading = false
+            state.userProfile = action.payload
+        })
+        .addCase(updateProfile.fulfilled, (state, action)=>{
+            state.loading = false
+            state.userProfile = action.payload
+        })
+    }
+})
+
 export const productReducer = newProductSlice.reducer
 export const salesReducer = newSalesSlice.reducer
+export const userSalesOrder = userOrderList.reducer
