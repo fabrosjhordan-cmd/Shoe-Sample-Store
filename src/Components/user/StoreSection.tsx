@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useCart } from "../../provider/CartProvider";
 import { ToastContainer, toast } from 'react-toastify';
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppDispatch } from "../../hooks";
 import { fetchData } from "../../newProductSlice";
 import type { StoreProps } from "../../types";
 
