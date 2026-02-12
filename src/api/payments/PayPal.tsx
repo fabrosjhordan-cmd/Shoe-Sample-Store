@@ -50,7 +50,6 @@ export const PayPal = ({address, email, sum, setTotalPrice, totalPrice, setOrder
                     localStorage.setItem('total', String(0));
                 }
 
-
                 // Clear Items
                 const storedOrder = localStorage.getItem('items');
                 if(storedOrder){

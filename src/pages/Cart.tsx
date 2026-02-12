@@ -8,6 +8,7 @@ import { useCart } from "../provider/CartProvider";
 import { selectProfile } from "../newProductSlice";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { PayPal } from "../api/payments/PayPal";
+import { toast, ToastContainer } from "react-toastify";
 
 export const Cart = ({loading, session, isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
     const profile = useAppSelector((state)=> state.users.userProfile)
@@ -33,6 +34,7 @@ export const Cart = ({loading, session, isScrolled, isDarkMode, setIsDarkMode}: 
         if(storedSum){
             setTotalPrice(Number(storedSum) ?? 0);
         }
+       
     }, [items, total])
 
     useEffect(()=>{
@@ -51,6 +53,32 @@ export const Cart = ({loading, session, isScrolled, isDarkMode, setIsDarkMode}: 
     const checkOut = (event : any) =>{
         event.preventDefault();
         
+    }
+
+    const validateOrders = (condition: string) =>{
+        console.log(condition);
+        if(orders.length < 1 || items.length < 1 ){
+           return toast.error('The cart cannot be empty',{
+                        position: "bottom-right",
+                        theme: "dark",
+                        closeOnClick: true,
+                        hideProgressBar: true
+                    })
+        }
+        if(email.trim() === '' || address.trim() === ''){
+            return toast.error('The email and address cannot be empty',{
+                        position: "bottom-right",
+                        theme: "dark",
+                        closeOnClick: true,
+                        hideProgressBar: true
+                    })
+        }
+        if(condition === 'open'){
+            setPayPal(true);
+        }
+        if(condition === 'close'){
+            setPayPal(false);
+        }
     }
 
 return(
@@ -127,14 +155,15 @@ return(
                 {payPal ? 
                 <div className="flex flex-col w-full">
                     <PayPal email={email} address={address} sum={sum} setTotalPrice={setTotalPrice} totalPrice={totalFee} setOrders={setOrders} orders={orders}/>
-                    <button onClick={()=>setPayPal(false)} className="px-4 py-2 border border-foreground/70 rounded-md">Cancel</button>
+                    <button onClick={()=>validateOrders('close')} className="px-4 py-2 border border-foreground/70 rounded-md">Cancel</button>
                 </div>
                     : 
-                <button onClick={()=>setPayPal(true)} className="py-5 bg-primary text-xl font-semibold hover:bg-primary/70 rounded-full">Checkout</button>
+                <button onClick={()=>validateOrders('open')} className="py-5 bg-primary text-xl font-semibold hover:bg-primary/70 rounded-full">Checkout</button>
                 }
             </form>
             </div>
         </div>
+        <ToastContainer limit={1}/>
     </div>
     )
 

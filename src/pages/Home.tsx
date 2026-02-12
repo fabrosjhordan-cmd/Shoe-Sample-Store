@@ -3,16 +3,26 @@ import { ThemeToggle } from "../Components/ThemeToggle";
 import { HeroSection } from "../Components/user/HeroSection";
 import type { HomeProps } from "../types";
 import { StoreSection } from "../Components/user/StoreSection";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { fetchData } from "../newProductSlice";
 import { Loader } from "../Components/user/Loader";
-
+import { useEffect } from "react";
 
 export const Home = ({ isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
-    const isLoading = useAppSelector((state) => state.product.loading);
+    const shoes = useAppSelector((state)=> state.product.items);
+    const dispatch = useAppDispatch()
+
+    useEffect(()=>{
+        dispatch(fetchData());
+    }, [])
     
+    if(shoes.length < 1){
+        return <Loader />
+    }else{
+    }
+
     return(
         <>
-            {isLoading && <Loader />}
             {/* Theme */}
             <ThemeToggle isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
             {/* NavBar */}
@@ -22,7 +32,7 @@ export const Home = ({ isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
             <div id="home" className="min-h-screen container bg-background text-foreground overflow-x-hidden ">   
                 <main>
                     <HeroSection isDarkMode={isDarkMode}/>
-                    <StoreSection />
+                    <StoreSection shoes={shoes}/>
                 </main>
             </div>
 

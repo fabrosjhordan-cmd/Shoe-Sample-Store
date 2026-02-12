@@ -6,9 +6,9 @@ import { useCart } from "../../provider/CartProvider";
 import { ToastContainer, toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchData } from "../../newProductSlice";
+import type { StoreProps } from "../../types";
 
-export const StoreSection = () =>{
-    const shoes = useAppSelector((state)=> state.product.items);
+export const StoreSection = ({shoes} : StoreProps) =>{
     const dispatch = useAppDispatch()
     const {addItem} = useCart();
     const [currentPage, setCurrentPage] = useState<number>(()=>{

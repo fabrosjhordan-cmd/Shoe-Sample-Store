@@ -50,7 +50,7 @@ export type AuthData = {
 }
 
 export type StoreProps = {
-    session: Session | undefined
+    shoes: Tables<'products'>[]
 }
 
 export type CartItem = {
