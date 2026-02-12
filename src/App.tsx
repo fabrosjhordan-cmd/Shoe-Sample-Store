@@ -28,12 +28,12 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          <Route index element={<Home session={session} isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
+          <Route index element={<Home loading={loading} session={session} isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
           <Route path='about' element={<About isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
           <Route path='login' element={<SignIn isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
           <Route path='signup' element={<SignUp isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
           <Route path='cart' element={<Cart loading={loading} session={session} isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
-          <Route path='dashboard' element={<DashBoard session={session} isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />}/>
+          <Route path='dashboard' element={<DashBoard loading={loading} session={session} isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />}/>
           <Route path='profile' element={<Profile loading={loading} session={session} isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
           <Route path='*' element={<NotFound />} />
           

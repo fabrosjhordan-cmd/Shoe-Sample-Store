@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react";
-import type { AuthData } from "../types";
+import { type AuthData } from "../types";
 import { supabase } from "../supabaseClient";
 
 const AuthContext = createContext<AuthData>({
     session: undefined,
     profile: null,
-    loading: true
+    loading: true,
 })
 
 export default function AuthProvider({children} : PropsWithChildren){
@@ -43,8 +43,11 @@ export default function AuthProvider({children} : PropsWithChildren){
             }
         }
     )
+   
     return ()=> listener.subscription.unsubscribe();
     }, [])
+
+
 
     return(
         <AuthContext value={{session, profile, loading}}>

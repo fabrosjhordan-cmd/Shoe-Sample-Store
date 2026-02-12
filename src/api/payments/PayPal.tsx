@@ -13,7 +13,7 @@ export const PayPal = ({address, email, sum, setTotalPrice, totalPrice, setOrder
         if(!window.paypal || !paypal.current) return
         
         const pay = window.paypal.Buttons({
-            createOrder: (data: any, actions: any, err: any) =>{
+            createOrder: (actions: any) =>{
                 return actions.order.create({
                     intent: "CAPTURE",
                     purchase_units: [
@@ -27,7 +27,7 @@ export const PayPal = ({address, email, sum, setTotalPrice, totalPrice, setOrder
                     ]
                 })
             },
-            onApprove: async (data: any, actions: any)=>{
+            onApprove: async (actions: any)=>{
                 const order = await actions.order.capture()
                 console.log(order);
                 if(!session){

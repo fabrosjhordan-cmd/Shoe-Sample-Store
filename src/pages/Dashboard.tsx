@@ -8,10 +8,11 @@ import { ThemeToggle } from "../Components/ThemeToggle"
 import { type HomeProps } from "../types"
 import { NewProducts } from "../Components/admin/NewProducts"
 import { useNavigate } from "react-router-dom"
-import { useAppSelector } from "../hooks"
+import { useAppDispatch, useAppSelector } from "../hooks"
 import { Loader } from "../Components/user/Loader"
+import { selectProfile } from "../newProductSlice"
 
-export const DashBoard = ({session, isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
+export const DashBoard = ({loading, session, isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
     const [id, setId] = useState(()=>{
         const storedId = sessionStorage.getItem('id')
         return storedId ? Number(storedId) : 0
@@ -25,7 +26,9 @@ export const DashBoard = ({session, isScrolled, isDarkMode, setIsDarkMode} : Hom
         return storedScreen ? storedScreen : 'home'
     });
     const isLoading = useAppSelector((state) => state.product.loading);
-    const nav = useNavigate()
+    const profile = useAppSelector((state)=> state.users.userProfile);
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     useEffect(()=>{
         sessionStorage.setItem('screen', screen);
@@ -33,9 +36,24 @@ export const DashBoard = ({session, isScrolled, isDarkMode, setIsDarkMode} : Hom
         sessionStorage.setItem('id', String(id));
     }, [screen, isEditing]);
 
-    // if(!session){
-    //     nav('/');
-    // }
+    useEffect(()=>{
+        if(!loading && session){
+            dispatch(selectProfile(session?.user.id));
+        }
+        if(!loading && !session){
+            navigate('/', {replace: true});
+        }
+    }, [loading]);
+
+    useEffect(()=>{
+        if(loading || isLoading) return;
+        if(profile.length < 1) return;
+        const role = profile[0]?.role || '';
+        if(role !== 'admin'){
+            navigate('/', {replace: true});
+        }
+    }, [isLoading,profile])
+
     return (
         <>
         {isLoading && <Loader />}

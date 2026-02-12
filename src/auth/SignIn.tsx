@@ -14,10 +14,9 @@ export const SignIn = ({isDarkMode, isScrolled, setIsDarkMode}: ThemeProps) =>{
     const {session} = useAuth();
     const navigate = useNavigate();
 
-    useEffect(()=>{
+     useEffect(()=>{
         if(session){
             navigate('/', {replace: true});
-            console.log('hydrated')
         }
     }, [session])
 

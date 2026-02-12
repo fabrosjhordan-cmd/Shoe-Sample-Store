@@ -11,6 +11,7 @@ export type HomeProps = {
     isDarkMode: boolean
     setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>
     session: Session | undefined
+    loading: boolean
 }
 
 
