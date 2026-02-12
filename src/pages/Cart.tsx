@@ -5,65 +5,55 @@ import { ThemeToggle } from "../Components/ThemeToggle";
 import { useEffect, useState } from "react";
 import { BiMinus } from "react-icons/bi";
 import { useCart } from "../provider/CartProvider";
-import { addOrder, addOrderList } from "../newProductSlice";
-import { useAppDispatch } from "../hooks";
+import { selectProfile } from "../newProductSlice";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { PayPal } from "../api/payments/PayPal";
 
-export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
+export const Cart = ({loading, session, isScrolled, isDarkMode, setIsDarkMode}: CartProps) =>{
+    const profile = useAppSelector((state)=> state.users.userProfile)
     const [orders, setOrders] = useState<Orders[]>([]); 
     const [totalPrice, setTotalPrice] = useState(0);
+    const shippingFee : number = 58;
+    const totalFee = totalPrice+shippingFee;
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
     const dispatch = useAppDispatch();
-    const sum = orders.map((items)=> items.quantity).reduce((acc,val)=>acc+val, 0)
     const {updateQuantity, items, total} = useCart();
-    const shippingFee = 58
+    const sum = orders.map((items)=> items.quantity).reduce((acc,val)=>acc+val, 0)
+    const [payPal, setPayPal] = useState(false);
 
     useEffect(()=>{
         localStorage.setItem('items', JSON.stringify(items));
-        localStorage.setItem('total', String(total));
-        const storedOrder = localStorage.getItem('items')
+        localStorage.setItem('total', JSON.stringify(total));
+        const storedOrder = localStorage.getItem('items');
+        const storedSum = localStorage.getItem('total');
         if(storedOrder){
             setOrders(JSON.parse(storedOrder) ?? [])
         }
-        const storedSum = localStorage.getItem('total')
         if(storedSum){
             setTotalPrice(Number(storedSum) ?? 0);
         }
-        setEmail(session?.user.email ?? '');
-    }, [items, session]);
+    }, [items, total])
+
+    useEffect(()=>{
+        localStorage.setItem('items', JSON.stringify(orders));
+        localStorage.setItem('total', String(totalPrice));
+    }, [orders, totalPrice]);
+
+    useEffect(()=>{
+        if(session){
+            dispatch(selectProfile(session?.user.id));
+            setEmail(session?.user.email ?? '');
+            setAddress(profile[0]?.address ?? '');
+        }
+    }, [profile, loading]);
 
     const checkOut = (event : any) =>{
         event.preventDefault();
-            if(!session){
-                const cart_id = crypto.randomUUID()
-                dispatch(addOrder({cart_id, email, quantity: sum, totalPrice, role: 'guest'}));
-                {orders.map((items)=>{
-                    const total = items.product.price * items.quantity
-                    dispatch(addOrderList({total, quantity: items.quantity, name: items.product.name, cart_id, order_id: items.id , product_id: items.product.id}));
-                })}
-                localStorage.setItem('items', JSON.stringify([]));
-                localStorage.setItem('total', String(0));
-            }else{
-                const cart_id = crypto.randomUUID()
-                dispatch(addOrder({cart_id, email, quantity: sum, totalPrice, role: session.user.role}));
-                {orders.map((items)=>{
-                    const total = items.product.price * items.quantity
-                    dispatch(addOrderList({total, quantity: items.quantity, name: items.product.name, cart_id, order_id: items.id , product_id: items.product.id}));
-                })}
-                localStorage.setItem('items', JSON.stringify([]));
-                localStorage.setItem('total', String(0));
-            }
-            const storedOrder = localStorage.getItem('items');
-            if(storedOrder){
-                setOrders([])
-            }
-            const storedSum = localStorage.getItem('total')
-            if(storedSum){
-                setTotalPrice(0);
-            }
+        
     }
-    
-    return(
+
+return(
     <div>
             {/* Theme */}
             <ThemeToggle isScrolled={isScrolled} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
@@ -94,9 +84,9 @@ export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps
                         <div className="flex flex-col justify-between">
                             <p className="text-xl font-bold">₱ {(items.product.price * items.quantity).toFixed(2)}</p>
                             <div className="flex flex-row justify-between border border-foreground/30 rounded-full px-3 py-2">
-                                {items.quantity > 1 ? <button><BiMinus onClick={()=>updateQuantity(items.id, -1)} size={25} /></button> : <button><BsTrash onClick={()=>updateQuantity(items.id, -1)} size={25} /></button>}
+                                {items.quantity > 1 ? <button><BiMinus onClick={()=>{updateQuantity(items.id, -1), setPayPal(false)}} size={25} /></button> : <button><BsTrash onClick={()=>{updateQuantity(items.id, -1), setPayPal(false)}} size={25} /></button>}
                                 <p>{items.quantity}</p>
-                                <button><BsPlus onClick={()=>updateQuantity(items.id, 1)} size={25} /></button>
+                                <button><BsPlus onClick={()=>{updateQuantity(items.id, 1), setPayPal(false)}} size={25} /></button>
                             </div>
                         </div>
                         </div>
@@ -107,14 +97,15 @@ export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps
             </div>   
             
             {/* Summary */}
-            <form onSubmit={checkOut} className="relative flex flex-col w-[40vh] min-h-screen pt-24 max-sm:hidden gap-2">
+            <div className="relative flex flex-col w-[60vh] min-h-screen pt-24 pb-12 max-sm:hidden gap-2">
+            <form onSubmit={checkOut} className="flex flex-col gap-2">
                 <h1 className="text-xl font-bold">Summary</h1>
                 {/* Email */}
                 <h1 className="text-md font-semibold">Email: </h1>
                 <input type='email' onChange={(e)=>setEmail(e.target.value)} value={email} className="border p-2 rounded-md focus:outline-hidden" placeholder="Put your email here.." readOnly={session ? true : false} required/>
                 {/* Address */}
                 <h1 className="text-md font-semibold">Address: </h1>
-                <input type='text' onChange={(e)=>setAddress(e.target.value)} value={address} className="border p-2 rounded-md focus:outline-hidden" placeholder="Put your address here.." required/>
+                <input type='text' onChange={(e)=>setAddress(e.target.value)} value={address} className="border p-2 rounded-md focus:outline-hidden" placeholder="Put your address here.." readOnly={session ? true : false} required/>
                 <p className="text-xs text-foreground/50">Note: The email you will put here will be the one who will receive the invoice from our store email, but if you are signed in as authenticated user we will use that account's email instead.</p>
                 <div className="flex flex-row justify-between mt-4">
                     <p className="text-sm">Quantity</p>
@@ -130,13 +121,56 @@ export const Cart = ({session, isScrolled, isDarkMode, setIsDarkMode}: CartProps
                 </div>
                 <div className="flex flex-row justify-between">
                     <p className="text-lg font-semibold">Total</p>
-                    <p className="text-lg font-semibold">₱ {(totalPrice+shippingFee).toFixed(2)}</p>
+                    <p className="text-lg font-semibold">₱ {totalFee.toFixed(2)}</p>
                 </div>
-                <button className="py-5 bg-primary text-xl font-semibold hover:bg-primary/70 rounded-full">Checkout</button>
+                {/* PayPal */}
+                {payPal ? 
+                <div className="flex flex-col w-full">
+                    <PayPal email={email} address={address} sum={sum} setTotalPrice={setTotalPrice} totalPrice={totalFee} setOrders={setOrders} orders={orders}/>
+                    <button onClick={()=>setPayPal(false)} className="px-4 py-2 border border-foreground/70 rounded-md">Cancel</button>
+                </div>
+                    : 
+                <button onClick={()=>setPayPal(true)} className="py-5 bg-primary text-xl font-semibold hover:bg-primary/70 rounded-full">Checkout</button>
+                }
             </form>
+            </div>
         </div>
     </div>
     )
 
     
 }
+
+
+
+
+
+
+
+// if(!session){
+            //     const cart_id = crypto.randomUUID()
+            //     dispatch(addOrder({cart_id, email, address, quantity: sum, totalPrice, role: 'guest', user_id: ''}));
+            //     {orders.map((items)=>{
+            //         const total = items.product.price * items.quantity
+            //         dispatch(addOrderList({total, quantity: items.quantity, name: items.product.name, cart_id, order_id: items.id , product_id: items.product.id}));
+            //     })}
+            //     localStorage.setItem('items', JSON.stringify([]));
+            //     localStorage.setItem('total', String(0));
+            // }else{
+            //     const cart_id = crypto.randomUUID()
+            //     dispatch(addOrder({cart_id, email, address, quantity: sum, totalPrice, role: session.user.role, user_id: session.user.id}));
+            //     {orders.map((items)=>{
+            //         const total = items.product.price * items.quantity
+            //         dispatch(addOrderList({total, quantity: items.quantity, name: items.product.name, cart_id, order_id: items.id , product_id: items.product.id}));
+            //     })}
+            //     localStorage.setItem('items', JSON.stringify([]));
+            //     localStorage.setItem('total', String(0));
+            // }
+            // const storedOrder = localStorage.getItem('items');
+            // if(storedOrder){
+            //     setOrders([])
+            // }
+            // const storedSum = localStorage.getItem('total')
+            // if(storedSum){
+            //     setTotalPrice(0);
+            // }

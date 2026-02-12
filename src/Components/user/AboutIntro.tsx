@@ -15,7 +15,7 @@ const techStack = [
 
 export const AboutIntro= ()=>{
     return (
-        <div className="container flex flex-col gap-6">
+        <div className="min-h-screen container flex flex-col gap-6">
             <div className="flex flex-row">
                 <div className="flex flex-col gap-4">
                     <h1 className="text-3xl font-semibold">About</h1>

@@ -4,7 +4,7 @@ import { useAppDispatch } from "../../hooks";
 import { updateProfile } from "../../newProductSlice";
 import { useNavigate } from "react-router-dom";
 
-export const Settings = ({profileLoading, loading, session, profile} : UserProfileProps) =>{
+export const Settings = ({ loading, session, profile} : UserProfileProps) =>{
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [address, setAddress] = useState('');

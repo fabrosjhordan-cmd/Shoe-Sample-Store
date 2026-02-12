@@ -33,7 +33,7 @@ export const Profile = ({loading, session, isScrolled, isDarkMode, setIsDarkMode
         <NavBar isScrolled={isScrolled} />
             <div className="min-h-screen container bg-background text-foreground overflow-x-hidden">
                 <main>
-                    <Settings profileLoading={profileLoading} loading={loading} session={session} profile={profile} />
+                    <Settings loading={loading} session={session} profile={profile} />
                     <History user={user}/>
                 </main>
             </div>

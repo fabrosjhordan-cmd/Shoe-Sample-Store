@@ -84,6 +84,7 @@ export type CartProps ={
     isDarkMode: boolean
     setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>
     session: Session | undefined
+    loading: boolean
 }
 
 export type ProfileProps = {
@@ -137,7 +138,16 @@ export type UserProfileProps= {
     profile: Tables<'profiles'>[]
     session: Session | undefined
     loading: boolean
-    profileLoading: boolean
+}
+
+export type PayPalProps = {
+    totalPrice: number
+    email: string
+    address: string
+    sum: number
+    setOrders: React.Dispatch<React.SetStateAction<Orders[]>>
+    setTotalPrice: React.Dispatch<React.SetStateAction<number>>
+    orders: Orders[]
 }
 
 
