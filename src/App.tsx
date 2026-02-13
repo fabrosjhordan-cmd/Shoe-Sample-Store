@@ -9,7 +9,6 @@ import { useAuth } from './provider/AuthProvider';
 import { Cart } from './pages/Cart';
 import { DashBoard } from './pages/Dashboard';
 import { Profile } from './pages/Profile';
-import emailjs from '@emailjs/browser';
 
 function App() {
   const {session, loading} = useAuth();
@@ -17,7 +16,6 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
       
       useEffect(()=>{
-        emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
         const handleScroll = () =>{
             setIsScrolled(window.scrollY > 10);
         }

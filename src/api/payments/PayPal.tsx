@@ -29,7 +29,7 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
 
     useEffect(()=>{
         if(!window.paypal || !paypal.current) return
-        
+         emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
         const pay = window.paypal.Buttons({
             createOrder: (_data: any, actions: any) =>{
                 return actions.order.create({
