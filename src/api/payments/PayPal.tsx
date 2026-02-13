@@ -48,6 +48,8 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
             onApprove: async (_data: any, actions: any)=>{
                 const order = await actions.order.capture()
                 const orderList = orders.map((items)=>({
+                    id: items.id,
+                    prod_id: items.product.id,
                     name: items.product.name,
                     gender: items.product.gender,
                     image_url: items.product.image,
@@ -55,12 +57,12 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
                     price: items.product.price * items.quantity
                 }))
                 console.log(order);
-                const cart_id = crypto.randomUUID()
                 if(!session){
+                    const cart_id = crypto.randomUUID()
                     dispatch(addOrder({cart_id, email, address, quantity: sum, totalFee, role: 'guest', user_id: ''}));
-                    {orders.map((items)=>{
-                        const total = items.product.price * items.quantity
-                        dispatch(addOrderList({total, quantity: items.quantity, name: items.product.name, cart_id, order_id: items.id , product_id: items.product.id}));
+                    {orderList.map((items)=>{
+                        const total = items.price * items.units
+                        dispatch(addOrderList({total, quantity: items.units, name: items.name, cart_id, order_id: items.id , product_id: items.prod_id}));
                     })}
                     try{
                         await emailjs.send(
@@ -89,10 +91,11 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
                     localStorage.setItem('items', JSON.stringify([]));
                     localStorage.setItem('total', String(0));
                 }else{
+                    const cart_id = crypto.randomUUID()
                     dispatch(addOrder({cart_id, email, address, quantity: sum, totalFee, role: session.user.role, user_id: session.user.id}));
-                    {orders.map((items)=>{
-                        const total = items.product.price * items.quantity
-                        dispatch(addOrderList({total, quantity: items.quantity, name: items.product.name, cart_id, order_id: items.id , product_id: items.product.id}));
+                    {orderList.map((items)=>{
+                        const total = items.price * items.units
+                        dispatch(addOrderList({total, quantity: items.units, name: items.name, cart_id, order_id: items.id , product_id: items.prod_id}));
                     })}
                     try{
                         await emailjs.send(
