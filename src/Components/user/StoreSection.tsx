@@ -15,6 +15,7 @@ export const StoreSection = ({shoes} : StoreProps) =>{
         const storedPage : any = sessionStorage.getItem('page')
         return storedPage ? Number(storedPage) : 1;
     });
+    const [loading, setLoading]=useState(false);
 
     const itemsPerPage = 6;
     const numberedPage : any[] = []
@@ -43,6 +44,10 @@ export const StoreSection = ({shoes} : StoreProps) =>{
     }
 
     const handleCart = (item : any) =>{
+        setLoading(true);
+        setTimeout(()=>{
+            setLoading(false)
+        }, 1500);
         if(!item){
             return
         }
@@ -69,7 +74,7 @@ export const StoreSection = ({shoes} : StoreProps) =>{
                             <div className="font-medium text-lg">{product.name}</div>
                             <div className="text-sm text-foreground/60 capitalize">{product.gender}</div>
                             <div className="text-sm text-primary/90 mt-auto">₱ {product.price.toFixed(2)}</div>
-                            <button onClick={()=>handleCart(product.id)} className="flex flex-row items-center justify-center gap-4 w-full py-1.5 bg-primary/30 rounded-md mt-auto mb-2 hover:scale-103 hover:bg-primary/60 duration-200"><BiCart size={20} />Add to Cart</button>
+                            <button onClick={()=>handleCart(product.id)} className={`flex flex-row items-center justify-center gap-4 w-full py-1.5 ${loading ? 'bg-foreground/50' : 'bg-primary/30 hover:bg-primary/60'} rounded-md mt-auto mb-2 hover:scale-103 duration-200`} disabled={loading}><BiCart size={20} />Add to Cart</button>
                         </div>
                     ))
                     }
