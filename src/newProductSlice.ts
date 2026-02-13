@@ -33,9 +33,9 @@ export const fetchByUser = createAsyncThunk(
 
 export const addOrder = createAsyncThunk(
     'product/addOrder',
-    async({cart_id, email, quantity, totalPrice, role, address, user_id} : {cart_id: string, email: string, quantity: number, totalPrice: number, role: string | undefined, address: string, user_id: string}, thunkAPI) =>{
+    async({cart_id, email, quantity, totalFee, role, address, user_id} : {cart_id: string, email: string, quantity: number, totalFee: number, role: string | undefined, address: string, user_id: string}, thunkAPI) =>{
         try{
-            const {data, error} = await supabase.from('sales').insert({cart_id, email, quantity, total: totalPrice, role, address, user_id}).select()
+            const {data, error} = await supabase.from('sales').insert({cart_id, email, quantity, total: totalFee, role, address, user_id}).select()
             if(error) throw error
             return data
         }catch(error){

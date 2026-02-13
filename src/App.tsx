@@ -9,6 +9,7 @@ import { useAuth } from './provider/AuthProvider';
 import { Cart } from './pages/Cart';
 import { DashBoard } from './pages/Dashboard';
 import { Profile } from './pages/Profile';
+import emailjs from '@emailjs/browser';
 
 function App() {
   const {session, loading} = useAuth();
@@ -16,11 +17,12 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
       
       useEffect(()=>{
-          const handleScroll = () =>{
-              setIsScrolled(window.scrollY > 10);
-          }
-          window.addEventListener('scroll', handleScroll);
-          return ()=> window.removeEventListener('scroll', handleScroll)
+        emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+        const handleScroll = () =>{
+            setIsScrolled(window.scrollY > 10);
+        }
+        window.addEventListener('scroll', handleScroll);
+        return ()=> window.removeEventListener('scroll', handleScroll)
       }, []);
 
   return (

@@ -143,6 +143,8 @@ export type UserProfileProps= {
 
 export type PayPalProps = {
     totalPrice: number
+    shippingFee: number
+    totalFee: number
     email: string
     address: string
     sum: number

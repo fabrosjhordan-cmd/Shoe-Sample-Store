@@ -42,6 +42,9 @@ export const Cart = ({loading, session, isScrolled, isDarkMode, setIsDarkMode}: 
     useEffect(()=>{
         localStorage.setItem('items', JSON.stringify(orders));
         localStorage.setItem('total', String(totalPrice));
+        if(orders.length < 1){
+            setPayPal(false);
+        }
     }, [orders, totalPrice]);
 
     useEffect(()=>{
@@ -163,7 +166,7 @@ return(
             {/* PayPal */}
             {payPal ? 
             <div className="flex flex-col w-full">
-                <PayPal email={email} address={address} sum={sum} setTotalPrice={setTotalPrice} totalPrice={totalFee} setOrders={setOrders} orders={orders}/>
+                <PayPal email={email} address={address} sum={sum} setTotalPrice={setTotalPrice} totalPrice={totalPrice} setOrders={setOrders} orders={orders} shippingFee={shippingFee} totalFee={totalFee}/>
                 <button onClick={()=>validateOrders('close')} className="px-4 py-2 border border-foreground/70 rounded-md">Cancel</button>
             </div>
                 : 
