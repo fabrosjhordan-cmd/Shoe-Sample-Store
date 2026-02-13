@@ -70,31 +70,30 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
                 })}
                 localStorage.setItem('items', JSON.stringify([]));
                 localStorage.setItem('total', String(0));
-
-                // try{
-                //     await emailjs.send(
-                //         import.meta.env.VITE_EMAILJS_SERVICE_ID,
-                //         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,{
-                //         logo: {
-                //             path:'https://www.svgrepo.com/show/475587/shoe.svg',
-                //             cid: "logo-cid"
-                //         },
-                //         email: email,
-                //         address: address,
-                //         order_id: cart_id,
-                //         orders: orderList,
-                //         cost:{
-                //             items_total: totalPrice,
-                //             shipping: shippingFee,
-                //             total: totalFee
-                //         }
-                //         }
-                //     )
-                //     successToast()
-                // }catch(error){
-                //     console.log(error);
-                //     errorToast()
-                // }
+                try{
+                    await emailjs.send(
+                        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+                        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,{
+                        logo: {
+                            path:'https://www.svgrepo.com/show/475587/shoe.svg',
+                            cid: "logo-cid"
+                        },
+                        email: email,
+                        address: address,
+                        order_id: cart_id,
+                        orders: orderList,
+                        cost:{
+                            items_total: totalPrice,
+                            shipping: shippingFee,
+                            total: totalFee
+                        }
+                        }
+                    )
+                    successToast()
+                }catch(error){
+                    console.log(error);
+                    errorToast()
+                }
                 //  Clear Items
                 const storedOrder = localStorage.getItem('items');
                 if(storedOrder){
