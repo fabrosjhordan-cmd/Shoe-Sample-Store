@@ -48,7 +48,7 @@ export const addOrderList = createAsyncThunk(
     'product/addOrderList',
     async({total, quantity, name, cart_id, order_id, product_id} : {total: number, quantity: number, name: string, cart_id: string, order_id: string, product_id: number}, thunkAPI)=>{
         try{
-            const {data, error} = await supabase.from('orders').insert({total, quantity, name, cart_id, order_id, product_id}).select().single();
+            const {data, error} = await supabase.from('orders').insert({total, quantity, name, cart_id, order_id, product_id}).select();
             if(error) throw error
             return data
         }catch(error){
