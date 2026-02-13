@@ -39,7 +39,7 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
                             description: 'Shoe',
                             amount: {
                                 currency_code: "PHP",
-                                value: totalPrice.toFixed().toString(),
+                                value: totalFee.toFixed().toString(),
                             }
                         }
                     ]
@@ -57,9 +57,10 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
                     price: items.product.price * items.quantity
                 }))
                 console.log(order);
+                if(!orderList) return;
                 if(!session){
                     const cart_id = crypto.randomUUID()
-                    dispatch(addOrder({cart_id, email, address, quantity: sum, totalFee, role: 'guest', user_id: ''}));
+                    dispatch(addOrder({cart_id, email, address, quantity: sum, totalFee, role: 'guest', user_id: null}));
                     {orderList.map((items)=>{
                         const total = items.price * items.units
                         dispatch(addOrderList({total, quantity: items.units, name: items.name, cart_id, order_id: items.id , product_id: items.prod_id}));

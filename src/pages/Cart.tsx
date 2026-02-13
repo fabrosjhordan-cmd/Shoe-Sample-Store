@@ -36,7 +36,6 @@ export const Cart = ({loading, session, isScrolled, isDarkMode, setIsDarkMode}: 
         if(storedSum){
             setTotalPrice(Number(storedSum) ?? 0);
         }
-       
     }, [items, total])
 
     useEffect(()=>{
