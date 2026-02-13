@@ -146,7 +146,13 @@ return(
             {/* Address */}
             <h1 className="text-md font-semibold">Address: </h1>
             <input type='text' onChange={(e)=>setAddress(e.target.value)} value={address} className="border p-2 rounded-md focus:outline-hidden" placeholder="Put your address here.." required/>
-            <p className="text-xs text-foreground/50">Note: The email you will put here will be the one who will receive the invoice from our store email, but if you are signed in as authenticated user we will use that account's email instead.</p>
+            <p className="text-sm text-foreground/75">Note: The email you will put here will be the one who will receive the invoice from our store email, but if you are signed in as authenticated user we will use that account's email instead.</p>
+            <div className="flex flex-col gap-1">
+                <h1 className="text-foreground font-bold">PayPal Test User:</h1>
+                <p className="text-foreground/85">sb-71sve49407360@personal.example.com</p>
+                <h1 className="text-foreground font-bold">PayPal Test Password:</h1>
+                <p className="text-foreground/85">E65x8#Z'</p>
+            </div>
             <div className="flex flex-row justify-between mt-4">
                 <p className="text-sm">Quantity</p>
                 <div className="text-sm">
