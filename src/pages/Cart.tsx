@@ -175,7 +175,7 @@ return(
                 <button onClick={()=>validateOrders('close')} className="px-4 py-2 border border-foreground/70 rounded-md">Cancel</button>
             </div>
                 : 
-            <button onClick={()=>validateOrders('open')} className="py-5 bg-primary text-xl font-semibold hover:bg-primary/70 rounded-full">Checkout</button>
+            <button onClick={()=>validateOrders('open')} className="py-5 bg-primary text-xl font-semibold hover:bg-primary/70 rounded-full" disabled={payPal}>Checkout</button>
             }
         </form>
         </div>

@@ -10,6 +10,10 @@ const SideBarLinks = [
 ]
  
 export const SideBar =({setScreen} : any)=>{
+    const redirect = (href : any)=>{
+        sessionStorage.setItem('salesId', '')
+        setScreen(href)
+    }
     return (
         <nav className="min-h-screen max-sm:hidden fixed z-40 transition-all duration-300 py-10 bg-primary/15 w-[35vh]">
             <div className="flex flex-col items-center justify-center">
@@ -22,7 +26,7 @@ export const SideBar =({setScreen} : any)=>{
 
                 <div className="mx-auto mt-10 flex flex-col space-y-3 w-full text-left">
                     {SideBarLinks.map((page, key)=>(
-                        <button onClick={()=>setScreen(page.href)} key={key} className="sidebar-button">
+                        <button onClick={()=>redirect(page.href)} key={key} className="sidebar-button">
                             {page.icon}{page.label}
                         </button>
                     ))}

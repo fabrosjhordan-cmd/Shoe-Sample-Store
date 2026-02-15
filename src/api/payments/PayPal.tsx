@@ -29,7 +29,6 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
 
     useEffect(()=>{
         if(!window.paypal || !paypal.current) return
-        const cart_id = crypto.randomUUID()
         emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
         const pay = window.paypal.Buttons({
             createOrder: (_data: any, actions: any) =>{
@@ -48,6 +47,7 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
             },
             onApprove: async (_data: any, actions: any)=>{
                 const order = await actions.order.capture()
+                console.log(order);
                 const role = session?.user.role || 'guest'
                 const user_id = session?.user.id || null
                 const orderList = orders.map((items)=>({
@@ -57,28 +57,33 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
                     gender: items.product.gender,
                     image_url: items.product.image,
                     units: items.quantity,
-                    price: items.product.price * items.quantity
+                    price: items.product.price
                 }))
-                console.log(order);
-                if(!orderList) return;
-                console.log(cart_id);
-                console.log(orderList);
-                dispatch(addOrder({cart_id, email, address, quantity: sum, totalFee, role: role, user_id: user_id}));
-                {orderList.map((items)=>{
-                    const total = items.price * items.units
-                    dispatch(addOrderList({total, quantity: items.units, name: items.name, cart_id, order_id: items.id , product_id: items.prod_id}));
-                })}
-                localStorage.setItem('items', JSON.stringify([]));
-                localStorage.setItem('total', String(0));
+                const cart_id = crypto.randomUUID()
+                try{
+                    await (dispatch(addOrder({cart_id, email, address, quantity: sum, totalFee, role: role, user_id: user_id}))).unwrap();
+                    await Promise.all(orderList.map((items)=>{
+                        const total = items.price * items.units
+                        return dispatch(addOrderList({total, quantity: items.units, name: items.name, cart_id, order_id: items.id , product_id: items.prod_id})).unwrap();
+                    }))
+
+                    //  Clear Items
+                    setOrders([])
+                    setTotalPrice(0);
+                    localStorage.setItem('items', JSON.stringify([]));
+                    localStorage.setItem('total', String(0));
+                }catch(error){
+                    console.log(error)
+                }
                 try{
                     await emailjs.send(
                         import.meta.env.VITE_EMAILJS_SERVICE_ID,
                         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,{
-                        logo: {
-                            path:'https://www.svgrepo.com/show/475587/shoe.svg',
-                            cid: "logo-cid"
-                        },
-                        email: email,
+                            logo: {
+                                path:'https://www.svgrepo.com/show/475587/shoe.svg',
+                                cid: "logo-cid"
+                            },
+                            email: email,
                         address: address,
                         order_id: cart_id,
                         orders: orderList,
@@ -87,21 +92,13 @@ export const PayPal = ({address, email, sum, shippingFee, totalFee, setTotalPric
                             shipping: shippingFee,
                             total: totalFee
                         }
-                        }
-                    )
-                    successToast()
-                }catch(error){
-                    console.log(error);
-                    errorToast()
+                    }
+                )
+                successToast()
                 }
-                //  Clear Items
-                const storedOrder = localStorage.getItem('items');
-                if(storedOrder){
-                    setOrders([])
-                }
-                const storedSum = localStorage.getItem('total')
-                if(storedSum){
-                    setTotalPrice(0);
+            catch(error){
+                console.log(error);
+                errorToast()
                 }
                 
             },

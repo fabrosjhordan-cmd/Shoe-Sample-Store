@@ -15,7 +15,9 @@ export const Statistics = () =>{
 
     const dispatch= useAppDispatch();
     useEffect(()=>{
-        dispatch(viewSales());
+        const sorting = sessionStorage.getItem('sort')
+        const sort = sorting === 'true' ? true : false
+        dispatch(viewSales(sort));
         dispatch(fetchData());
         dispatch(viewAllStatusShip());
         dispatch(viewAllStatusPackaging())

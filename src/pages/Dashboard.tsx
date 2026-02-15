@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../hooks"
 import { Loader } from "../Components/user/Loader"
 import { selectProfile } from "../newProductSlice"
+import { OrderList } from "../Components/admin/OrderList"
 
 export const DashBoard = ({loading, session, isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
     const [id, setId] = useState(()=>{
@@ -63,9 +64,10 @@ export const DashBoard = ({loading, session, isScrolled, isDarkMode, setIsDarkMo
             <div className="dashboard-screen">
                 {screen === 'home' && <Statistics  />}
                 {screen === 'products' && <Products setId={setId} setIsEditing={setIsEditing} setScreen={setScreen} />}
-                {screen === 'orders' && <Orders />}
+                {screen === 'orders' && <Orders setScreen={setScreen} />}
                 {screen === 'settings' && <Settings />}
                 {screen === 'newProduct' && <NewProducts id={id} isEditing={isEditing} setScreen={setScreen} />}
+                {screen === 'orderlist' && <OrderList setScreen={setScreen} />}
             </div>
     
         </div>

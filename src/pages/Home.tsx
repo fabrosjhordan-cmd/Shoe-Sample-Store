@@ -10,6 +10,7 @@ import { useEffect } from "react";
 
 export const Home = ({ isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
     const shoes = useAppSelector((state)=> state.product.items);
+    const isLoading = useAppSelector((state)=>state.product.loading);
     const dispatch = useAppDispatch()
 
     useEffect(()=>{
@@ -32,7 +33,7 @@ export const Home = ({ isScrolled, isDarkMode, setIsDarkMode} : HomeProps) =>{
             <div id="home" className="min-h-screen container bg-background text-foreground overflow-x-hidden ">   
                 <main>
                     <HeroSection isDarkMode={isDarkMode}/>
-                    <StoreSection shoes={shoes}/>
+                    <StoreSection shoes={shoes} isLoading={isLoading}/>
                 </main>
             </div>
 

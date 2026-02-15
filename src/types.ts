@@ -52,6 +52,7 @@ export type AuthData = {
 
 export type StoreProps = {
     shoes: Tables<'products'>[]
+    isLoading: boolean
 }
 
 export type CartItem = {
@@ -120,6 +121,10 @@ export type NewProductProps = {
     setScreen: React.Dispatch<React.SetStateAction<"home" | "products" | "orders" | "settings" | "newProduct">>
 }
 
+export type adminOrderList = {
+    setScreen: React.Dispatch<any>
+}
+
 export type initialStateProps ={
     items: Tables<'products'>[]
     sales: Tables<'sales'>[]
@@ -127,6 +132,7 @@ export type initialStateProps ={
     packaging: Tables<'sales'>[]
     userSalesList: Tables<'sales'>[]
     userProfile: Tables<'profiles'>[]
+    orderList: Tables<'orders'>[]
     loading: boolean
     error: string | null
 }
@@ -159,3 +165,5 @@ export const defaultShoeImage = 'https://imgs.search.brave.com/6aMZmWrpV715g9FN5
 export const tableHeader = ['Date', 'Status', 'Order ID','Email', 'Role', 'Address', 'Quantity', 'Action']
 
 export const userOrderTable = ['Date', 'Quantity', 'Status', 'Action']
+
+export const orderAction = ['waiting', 'packaging', 'shipping']

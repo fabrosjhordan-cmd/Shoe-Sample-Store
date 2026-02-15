@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { supabase } from "./supabaseClient";
 import type { initialStateProps } from "./types";
 
-const initialState : initialStateProps= {items: [], sales: [], shipping: [], userSalesList: [],packaging: [], userProfile: [], loading: false, error: null}
+const initialState : initialStateProps= {items: [], sales: [], shipping: [], userSalesList: [],packaging: [], userProfile: [], loading: false, error: null, orderList: []}
 
 export const fetchData = createAsyncThunk(
     'product/fetchData',
@@ -48,7 +48,7 @@ export const addOrderList = createAsyncThunk(
     'product/addOrderList',
     async({total, quantity, name, cart_id, order_id, product_id} : {total: number, quantity: number, name: string, cart_id: string, order_id: string, product_id: number}, thunkAPI)=>{
         try{
-            const {data, error} = await supabase.from('orders').insert({total, quantity, name, cart_id, order_id, product_id}).select();
+            const {data, error} = await supabase.from('orders').insert({total, quantity, name, cart_id, order_id, product_id}).select().single();
             if(error) throw error
             return data
         }catch(error){
@@ -85,9 +85,9 @@ export const updateProduct = createAsyncThunk(
 
 export const viewSales = createAsyncThunk(
     'sales/viewSales',
-    async(_, thunkAPI)=>{
+    async(sort: boolean, thunkAPI)=>{
         try{
-            const {data, error} = await supabase.from('sales').select('*').order('created_at', {ascending: false});
+            const {data, error} = await supabase.from('sales').select('*').order('created_at', {ascending: sort});
             if(error) throw error
             return data
         }catch(error){
@@ -95,6 +95,20 @@ export const viewSales = createAsyncThunk(
         }
     }
 )
+
+export const updateSalesAdmin = createAsyncThunk(
+    'sales/updateSalesAdmin',
+    async({salesId, target} : {salesId: string | null, target: string}, thunkAPI) =>{
+        try{
+            const {data, error} = await supabase.from('sales').update({status: target}).eq('cart_id', salesId).select().order('created_at', {ascending:false})
+            if(error) throw error
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+) 
+
 
 export const viewAllStatusShip = createAsyncThunk(
     'sales/viewAllStatus',
@@ -122,6 +136,19 @@ export const viewAllStatusPackaging = createAsyncThunk(
     }
 ) 
 
+export const viewOrdersAdmin = createAsyncThunk(
+    'user/viewOrdersAdmin',
+    async(cart_id : string | null, thunkAPI) =>{
+        try{
+            const {data, error} = await supabase.from('orders').select('*').eq('cart_id', cart_id).order('created_at', {ascending:false})
+            if(error) throw error
+            return data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+) 
+
 export const viewOrdersByUser = createAsyncThunk(
     'user/viewOrdersByUser',
     async(user_id : string, thunkAPI) =>{
@@ -134,7 +161,6 @@ export const viewOrdersByUser = createAsyncThunk(
         }
     }
 ) 
-
 
 export const selectProfile = createAsyncThunk(
     'user/selectProfile',
@@ -225,6 +251,10 @@ const newSalesSlice = createSlice({
             state.loading = false
             state.packaging = action.payload
         })
+        .addCase(updateSalesAdmin.fulfilled, (state, action)=>{
+            state.loading = false
+            state.sales = action.payload
+        })
     }
 })
 
@@ -240,6 +270,13 @@ const userOrderList = createSlice({
         .addCase(viewOrdersByUser.fulfilled, (state, action)=>{
             state.loading = false
             state.userSalesList = action.payload
+        })
+        .addCase(viewOrdersAdmin.pending, state=>{
+            state.loading = true
+        })
+        .addCase(viewOrdersAdmin.fulfilled, (state, action)=>{
+            state.loading = false
+            state.orderList = action.payload
         })
         .addCase(selectProfile.pending, state=>{
             state.loading = true
